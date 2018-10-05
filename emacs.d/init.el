@@ -1,5 +1,5 @@
 ;; Cask
-(require 'cask "~/.cask/cask.el")
+(require 'cask "/usr/local/Cellar/cask/0.8.4/cask.el")
 (cask-initialize)
 
 
@@ -9,13 +9,17 @@
 (tool-bar-mode 0)
 (setq inhibit-startup-message t)
 
+;; ;; commandキーをmetaキーとして使用
+;; (when (eq system-type 'darwin)
+;;   (setq ns-command-modifier (quote meta)))
+
 ;; バックアップファイル（foo.txt~）の保存先を設定
 (setq backup-directory-alist '((".*" . "~/.emacs.d/backups")))
 
 ;; font
 (set-face-attribute 'default nil
 :family "Liberation Mono" ;;font
-:height 110) ;;font size
+:height 180) ;;font size
 
 
 ;; helm
@@ -93,7 +97,7 @@
   '(progn
      ;; Translate the problematic keys to the function key Hyper:
      (keyboard-translate ?\C-i ?\H-i)
-     (keyboard-translate ?\C-m ?\H-m)
+     ;; (keyboard-translate ?\C-m ?\H-m)
      ;; companyと競合するのでyasnippetのフィールド移動は "C-i" のみにする
      (define-key yas-keymap [(tab)] nil)
      (define-key yas-keymap (kbd "TAB") nil)
