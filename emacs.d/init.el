@@ -9,16 +9,30 @@
 (tool-bar-mode 0)
 (setq inhibit-startup-message t)
 
-;; クリップボードへコピーする
+;; https://stackoverflow.com/questions/13517910/yank-does-not-paste-text-when-using-emacs-over-ssh
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; handle copy/paste intelligently
 (defun copy-from-osx ()
-  (shell-command-to-string "pbpaste"))
+  "Handle copy/paste intelligently on osx."
+  (let ((pbpaste (purecopy "/usr/bin/pbpaste")))
+    (if (and (eq system-type 'darwin)
+             (file-exists-p pbpaste))
+        (let ((tramp-mode nil)
+              (default-directory "~"))
+          (shell-command-to-string pbpaste)))))
+
 (defun paste-to-osx (text &optional push)
-  (let ((process-connection-type nil))
-    (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-      (process-send-string proc text)
-      (process-send-eof proc))))
-(setq interprogram-cut-function 'paste-to-osx)
-(setq interprogram-paste-function 'copy-from-osx)
+  "Handle copy/paste intelligently on osx.
+TEXT gets put into the Macosx clipboard.
+
+The PUSH argument is ignored."
+  (let* ((process-connection-type nil)
+         (proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+    (process-send-string proc text)
+    (process-send-eof proc)))
+
+(setq interprogram-cut-function 'paste-to-osx
+      interprogram-paste-function 'copy-from-osx)
 
 ;; ;; commandキーをmetaキーとして使用
 ;; (when (eq system-type 'darwin)
@@ -30,7 +44,7 @@
 ;; font
 (set-face-attribute 'default nil
 :family "Liberation Mono" ;;font
-:height 180) ;;font size
+:height 160) ;;font size
 
 
 ;; helm
@@ -234,6 +248,7 @@
 (add-hook 'c-mode-hook (lambda () (ggtags-mode 1)))
 (add-hook 'c++-mode-hook (lambda () (ggtags-mode 1)))
 (add-hook 'python-mode-hook (lambda () (ggtags-mode 1)))
+(add-hook 'php-mode-hook (lambda () (ggtags-mode 1)))
 (setq ggtags-mode-hook
     '(lambda ()
         (local-set-key "\M-t" 'ggtags-find-definition)    ;関数へジャンプ
@@ -260,3 +275,11 @@
              (ac-php-core-eldoc-setup) ;; enable eldoc
              (make-local-variable 'company-backends)
              (add-to-list 'company-backends 'company-ac-php-backend)))
+
+;; tramp mode config
+(setq tramp-default-method "ssh")
+(setq tramp-auto-save-directory "~/emacs/tramp-autosave")
+(setq auto-save-buffers-enhanced-exclude-regexps '("^/ssh:" "/sudo:" "/multi:"))
+
+;; helm-tramp config
+(define-key global-map (kbd "C-c s") 'helm-tramp)

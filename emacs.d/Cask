@@ -46,3 +46,5 @@
 (depends-on "typescript-mode")
 (depends-on "php-mode")
 (depends-on "company-php")
+(depends-on "helm-tramp")
+(depends-on "auto-save-buffers-enhanced")
