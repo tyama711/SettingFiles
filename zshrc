@@ -188,3 +188,5 @@ esac
 ## load user .zshrc configuration file
 #
 [ -f ${HOME}/.zshrc.mine ] && source ${HOME}/.zshrc.mine
+
+alias emacs='emacsclient -nw -a ""'
