@@ -1,15 +1,11 @@
 ;; Cask
-(require 'cask
-         (if (eq system-type 'darwin)
-             "/usr/local/Cellar/cask/0.8.4/cask.el"
-           ;;else
-           "$HOME/.cask/cask.el"
-           ))
+(require 'cask "/usr/local/Cellar/cask/0.8.4/cask.el")
 (cask-initialize)
 
-
 (setq default-tab-width 4)
-(keyboard-translate ?\C-h ?\C-?)
+;;(keyboard-translate ?\C-h ?\C-?)
+(define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))
+(global-set-key (kbd "M-?") 'help-for-help)
 (global-linum-mode 1)
 (tool-bar-mode 0)
 (setq inhibit-startup-message t)
@@ -137,8 +133,8 @@ The PUSH argument is ignored."
      (yas-global-mode 1)))
 
 
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+;;(add-hook 'python-mode-hook 'jedi:setup)
+;;(setq jedi:complete-on-dot t)
 
 
 ;; flycheck
