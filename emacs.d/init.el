@@ -1,5 +1,10 @@
 ;; Cask
-(require 'cask "/usr/local/Cellar/cask/0.8.4/cask.el")
+(require 'cask
+         (if (eq system-type 'darwin)
+             "/usr/local/Cellar/cask/0.8.4/cask.el"
+           ;;else
+           "$HOME/.cask/cask.el"
+           ))
 (cask-initialize)
 
 (setq default-tab-width 4)
