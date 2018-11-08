@@ -248,21 +248,21 @@ The PUSH argument is ignored."
 
 
 ;; gnu-global
-(require 'ggtags)
-(add-hook 'java-mode-hook (lambda () (ggtags-mode 1)))
-(add-hook 'c-mode-hook (lambda () (ggtags-mode 1)))
-(add-hook 'c++-mode-hook (lambda () (ggtags-mode 1)))
-(add-hook 'python-mode-hook (lambda () (ggtags-mode 1)))
-(add-hook 'php-mode-hook (lambda () (ggtags-mode 1)))
-(setq ggtags-mode-hook
-    '(lambda ()
-        (local-set-key "\M-t" 'ggtags-find-definition)    ;関数へジャンプ
-        (local-set-key "\M-r" 'ggtags-find-reference)   ;関数の参照元へジャンプ
-        (local-set-key "\M-s" 'ggtags-find-other-symbol) ;変数の定義元/参照先へジャンプ
-        (local-set-key "\M-p" 'ggtags-prev-mark)   ;前のバッファに戻る
-        (local-set-key "\M-n" 'ggtags-next-mark)   ;前のバッファに戻る
-        ))
-
+(cond ((>= emacs-major-version 25)
+    (require 'ggtags)
+    (add-hook 'java-mode-hook (lambda () (ggtags-mode 1)))
+    (add-hook 'c-mode-hook (lambda () (ggtags-mode 1)))
+    (add-hook 'c++-mode-hook (lambda () (ggtags-mode 1)))
+    (add-hook 'python-mode-hook (lambda () (ggtags-mode 1)))
+    (add-hook 'php-mode-hook (lambda () (ggtags-mode 1)))
+    (setq ggtags-mode-hook
+          '(lambda ()
+             (local-set-key "\M-t" 'ggtags-find-definition)    ;関数へジャンプ
+             (local-set-key "\M-r" 'ggtags-find-reference)   ;関数の参照元へジャンプ
+             (local-set-key "\M-s" 'ggtags-find-other-symbol) ;変数の定義元/参照先へジャンプ
+             (local-set-key "\M-p" 'ggtags-prev-mark)   ;前のバッファに戻る
+             (local-set-key "\M-n" 'ggtags-next-mark)   ;前のバッファに戻る
+             ))))
 
 (require 'gradle-mode)
 (gradle-mode 1)
