@@ -48,3 +48,4 @@
 (depends-on "company-php")
 (depends-on "helm-tramp")
 (depends-on "auto-save-buffers-enhanced")
+(depends-on "markdown-mode")
