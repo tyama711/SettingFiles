@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -eux
+
 # add epel repository
 wget http://ftp-srv2.kddilabs.jp/Linux/distributions/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
 rpm -ivh epel-release-6-8.noarch.rpm
@@ -15,7 +17,7 @@ tar zxvf emacs-26.1.tar.gz
 cd emacs-26.1
 ./configure --without-x
 make
-sudo make install
+make install
 popd
 cp -rf emacs.d ~/.emacs.d
 
