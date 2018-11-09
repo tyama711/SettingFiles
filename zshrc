@@ -189,4 +189,6 @@ esac
 #
 [ -f ${HOME}/.zshrc.mine ] && source ${HOME}/.zshrc.mine
 
-alias emacs='emacsclient -nw -a ""'
+which emacs && alias emacs='emacsclient -nw -a ""'
+[ -d $HOME/.cask ] && export  PATH=/home/takuyaya/.cask/bin:$PATH
+[ -d $HOME/miniconda3 ] && export PATH=/home/takuyaya/miniconda3/bin:$PATH
