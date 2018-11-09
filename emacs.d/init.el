@@ -37,8 +37,9 @@ The PUSH argument is ignored."
     (process-send-string proc text)
     (process-send-eof proc)))
 
-(setq interprogram-cut-function 'paste-to-osx
-      interprogram-paste-function 'copy-from-osx)
+(if (eq system-type 'darwin)
+    (setq interprogram-cut-function 'paste-to-osx
+      interprogram-paste-function 'copy-from-osx))
 
 ;; ;; commandキーをmetaキーとして使用
 ;; (when (eq system-type 'darwin)
