@@ -95,8 +95,15 @@ setopt share_history        # share command history data
 ## Completion configuration
 #
 fpath=(${HOME}/.zsh/functions/Completion ${fpath})
-autoload -U compinit
-compinit
+
+DIRSTACKSIZE=100
+setopt AUTO_PUSHD
+
+autoload -Uz compinit && compinit
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*:cd:*' ignore-parents parent pwd
+zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
 
 
 ## zsh editor
@@ -189,6 +196,6 @@ esac
 #
 [ -f ${HOME}/.zshrc.mine ] && source ${HOME}/.zshrc.mine
 
-which emacs && alias emacs='emacsclient -nw -a ""'
+alias emacs='emacsclient -nw -a ""'
 [ -d $HOME/.cask ] && export  PATH=/home/takuyaya/.cask/bin:$PATH
 [ -d $HOME/miniconda3 ] && export PATH=/home/takuyaya/miniconda3/bin:$PATH
