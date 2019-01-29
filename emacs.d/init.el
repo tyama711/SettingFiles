@@ -14,6 +14,10 @@
 (global-linum-mode 1)
 (tool-bar-mode 0)
 (setq inhibit-startup-message t)
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>") 'shrink-window)
+(global-set-key (kbd "S-C-<up>") 'enlarge-window)
 
 ;; https://stackoverflow.com/questions/13517910/yank-does-not-paste-text-when-using-emacs-over-ssh
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -50,7 +54,7 @@ The PUSH argument is ignored."
 
 ;; font
 (set-face-attribute 'default nil
-:family "Liberation Mono" ;;font
+;;:family "Liberation Mono" ;;font
 :height 160) ;;font size
 
 
