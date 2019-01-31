@@ -197,9 +197,7 @@ esac
 [ -f ${HOME}/.zshrc.mine ] && source ${HOME}/.zshrc.mine
 
 ## Macの場合はgsedを使用する
-if [ $(uname) -eq 'Darwin'];then
-    which gsed > /dev/null && alias sed='gsed'
-fi
+[ $(uname) = Darwin ] && which gsed > /dev/null && alias sed='gsed'
 
 ## デフォルトでemacsclientを使用する
 which emacsclient > /dev/null && alias emacs='emacsclient -nw -a ""'
