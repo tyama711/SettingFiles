@@ -145,52 +145,73 @@ alias df="df -h"
 alias su="su -l"
 
 
-## terminal configuration
-#
-case "${TERM}" in
-screen)
-    TERM=xterm
-    ;;
-esac
+# ## terminal configuration
+# #
+# case "${TERM}" in
+# screen)
+#     TERM=xterm
+#     ;;
+# esac
 
-case "${TERM}" in
-xterm|xterm-color)
-    export LSCOLORS=exfxcxdxbxegedabagacad
-    export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
-    ;;
-kterm-color)
-    stty erase '^H'
-    export LSCOLORS=exfxcxdxbxegedabagacad
-    export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
-    ;;
-kterm)
-    stty erase '^H'
-    ;;
-cons25)
-    unset LANG
-    export LSCOLORS=ExFxCxdxBxegedabagacad
-    export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=;34;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
-    ;;
-jfbterm-color)
-    export LSCOLORS=gxFxCxdxBxegedabagacad
-    export LS_COLORS='di=01;36:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    zstyle ':completion:*' list-colors 'di=;36;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
-    ;;
-esac
+# case "${TERM}" in
+# xterm|xterm-color)
+#     export LSCOLORS=exfxcxdxbxegedabagacad
+#     export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+#     zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
+#     ;;
+# kterm-color)
+#     stty erase '^H'
+#     export LSCOLORS=exfxcxdxbxegedabagacad
+#     export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+#     zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
+#     ;;
+# kterm)
+#     stty erase '^H'
+#     ;;
+# cons25)
+#     unset LANG
+#     export LSCOLORS=ExFxCxdxBxegedabagacad
+#     export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+#     zstyle ':completion:*' list-colors 'di=;34;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
+#     ;;
+# jfbterm-color)
+#     export LSCOLORS=gxFxCxdxBxegedabagacad
+#     export LS_COLORS='di=01;36:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+#     zstyle ':completion:*' list-colors 'di=;36;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
+#     ;;
+# esac
 
-# set terminal title including current directory
-#
-case "${TERM}" in
-xterm|xterm-color|kterm|kterm-color)
-    precmd() {
-        echo -ne "\033]0;${USER}@${HOST%%.*}:${PWD}\007"
-    }
-    ;;
-esac
+# # set terminal title including current directory
+# #
+# case "${TERM}" in
+# xterm|xterm-color|kterm|kterm-color)
+#     precmd() {
+#         echo -ne "\033]0;${USER}@${HOST%%.*}:${PWD}\007"
+#     }
+#     ;;
+# esac
 
+########################################
+# tmuxの設定
+# 自動ロギング
+if [[ $TERM = screen ]] || [[ $TERM = screen-256color ]] ; then
+    local LOGDIR=$HOME/tmux_logs
+    local LOGFILE=$(hostname)_$(date +%Y-%m-%d_%H%M%S_%N.log)
+    local FILECOUNT=0
+    local MAXFILECOUNT=500 #ここを好きな保存ファイル数に変える。
+    # zsh起動時に自動で$MAXFILECOUNTのファイル数以上ログファイルあれば消す
+    for file in `\find "$LOGDIR" -maxdepth 1 -type f -name "*.log" | sort --reverse`; do
+        FILECOUNT=`expr $FILECOUNT + 1`
+        if [ $FILECOUNT -ge $MAXFILECOUNT ]; then
+            rm -f $file
+        fi
+    done
+    [ ! -d $LOGDIR ] && mkdir -p $LOGDIR
+    tmux  set-option default-terminal "screen" \; \
+    pipe-pane        "cat >> $LOGDIR/$LOGFILE" \; \
+    display-message  "Started logging to $LOGDIR/$LOGFILE"
+fi
+########################################
 
 ## load user .zshrc configuration file
 #
@@ -204,3 +225,6 @@ which emacsclient > /dev/null && alias emacs='emacsclient -nw -a ""'
 
 [ -d $HOME/.cask ] && export  PATH=/home/takuyaya/.cask/bin:$PATH
 [ -d $HOME/miniconda3 ] && export PATH=/home/takuyaya/miniconda3/bin:$PATH
+
+## 制御文字を含むテキストでも綺麗に表示できるように
+alias less='less -R'
