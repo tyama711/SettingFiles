@@ -18,6 +18,8 @@ esac
 #
 autoload colors
 colors
+
+setopt promptsubst
 case ${UID} in
 0)
     PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') %B%{${fg[red]}%}%/#%{${reset_color}%}%b "
@@ -29,7 +31,7 @@ case ${UID} in
     PROMPT2="%{${fg[red]}%}%_%%%{${reset_color}%} "
     SPROMPT="%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%} "
     [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
-        PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
+        PROMPT="%{${fg[cyan]}%}\$? $(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
     ;;
 esac
 
@@ -191,40 +193,43 @@ alias su="su -l"
 #     ;;
 # esac
 
-########################################
-# tmuxの設定
-# 自動ロギング
-if [[ $TERM = screen ]] || [[ $TERM = screen-256color ]] ; then
-    local LOGDIR=$HOME/tmux_logs
-    local LOGFILE=$(hostname)_$(date +%Y-%m-%d_%H%M%S_%N.log)
-    local FILECOUNT=0
-    local MAXFILECOUNT=500 #ここを好きな保存ファイル数に変える。
-    # zsh起動時に自動で$MAXFILECOUNTのファイル数以上ログファイルあれば消す
-    for file in `\find "$LOGDIR" -maxdepth 1 -type f -name "*.log" | sort --reverse`; do
-        FILECOUNT=`expr $FILECOUNT + 1`
-        if [ $FILECOUNT -ge $MAXFILECOUNT ]; then
-            rm -f $file
-        fi
-    done
-    [ ! -d $LOGDIR ] && mkdir -p $LOGDIR
-    tmux  set-option default-terminal "screen" \; \
-    pipe-pane        "cat >> $LOGDIR/$LOGFILE" \; \
-    display-message  "Started logging to $LOGDIR/$LOGFILE"
-fi
-########################################
+# ########################################
+# # tmuxの設定
+# # 自動ロギング
+# if [[ $TERM = screen ]] || [[ $TERM = screen-256color ]] ; then
+#     local LOGDIR=$HOME/tmux_logs
+#     local LOGFILE=$(hostname)_$(date +%Y-%m-%d_%H%M%S_%N.log)
+#     local FILECOUNT=0
+#     local MAXFILECOUNT=500 #ここを好きな保存ファイル数に変える。
+#     # zsh起動時に自動で$MAXFILECOUNTのファイル数以上ログファイルあれば消す
+#     for file in `\find "$LOGDIR" -maxdepth 1 -type f -name "*.log" | sort --reverse`; do
+#         FILECOUNT=`expr $FILECOUNT + 1`
+#         if [ $FILECOUNT -ge $MAXFILECOUNT ]; then
+#             rm -f $file
+#         fi
+#     done
+#     [ ! -d $LOGDIR ] && mkdir -p $LOGDIR
+#     tmux  set-option default-terminal "screen" \; \
+#     pipe-pane        "cat >> $LOGDIR/$LOGFILE" \; \
+#     display-message  "Started logging to $LOGDIR/$LOGFILE"
+# fi
+# ########################################
 
 ## load user .zshrc configuration file
 #
 [ -f ${HOME}/.zshrc.mine ] && source ${HOME}/.zshrc.mine
 
-## Macの場合はgsedを使用する
-[ $(uname) = Darwin ] && which gsed > /dev/null && alias sed='gsed'
+# ## Macの場合はgsedを使用する
+# [ $(uname) = Darwin ] && which gsed > /dev/null && alias sed='gsed'
 
-## デフォルトでemacsclientを使用する
-which emacsclient > /dev/null && alias emacs='emacsclient -nw -a ""'
+# ## デフォルトでemacsclientを使用する
+# which emacsclient > /dev/null && alias emacs='emacsclient -nw -a ""'
 
-[ -d $HOME/.cask ] && export  PATH=/home/takuyaya/.cask/bin:$PATH
-[ -d $HOME/miniconda3 ] && export PATH=/home/takuyaya/miniconda3/bin:$PATH
+# [ -d $HOME/.cask ] && export  PATH=/home/takuyaya/.cask/bin:$PATH
+# [ -d $HOME/miniconda3 ] && export PATH=/home/takuyaya/miniconda3/bin:$PATH
 
-## 制御文字を含むテキストでも綺麗に表示できるように
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+##
 alias less='less -R'

@@ -49,3 +49,6 @@
 (depends-on "helm-tramp")
 (depends-on "auto-save-buffers-enhanced")
 (depends-on "markdown-mode")
+(depends-on "tide")
+(depends-on "prettier-js")
+(depends-on "imenu-list")

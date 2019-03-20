@@ -14,10 +14,17 @@
 (global-linum-mode 1)
 (tool-bar-mode 0)
 (setq inhibit-startup-message t)
+(global-set-key (kbd "C-c C-c") 'comment-or-uncomment-region)
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
+(global-set-key (kbd "C-c C-c") 'comment-or-uncomment-region)
+
+;;; 複数行移動
+(global-set-key "\M-n" (kbd "C-u 5 C-n"))
+(global-set-key "\M-p" (kbd "C-u 5 C-p"))
+
 
 ;; https://stackoverflow.com/questions/13517910/yank-does-not-paste-text-when-using-emacs-over-ssh
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -41,9 +48,9 @@ The PUSH argument is ignored."
     (process-send-string proc text)
     (process-send-eof proc)))
 
-(if (and (not window-system) (eq system-type 'darwin))
+(if (eq system-type 'darwin)
     (setq interprogram-cut-function 'paste-to-osx
-          interprogram-paste-function 'copy-from-osx))
+      interprogram-paste-function 'copy-from-osx))
 
 ;; ;; commandキーをmetaキーとして使用
 ;; (when (eq system-type 'darwin)
@@ -54,7 +61,7 @@ The PUSH argument is ignored."
 
 ;; font
 (set-face-attribute 'default nil
-;;:family "Liberation Mono" ;;font
+:family "Liberation Mono" ;;font
 :height 160) ;;font size
 
 
@@ -62,6 +69,7 @@ The PUSH argument is ignored."
 (require 'helm)
 (require 'helm-config)
 (helm-mode 1)
+(helm-popup-tip-mode)
 
 ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
 ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
@@ -119,7 +127,25 @@ The PUSH argument is ignored."
      (c++-mode . "bsd")
      (java-mode . "java")
      (awk-mode . "awk"))))
- '(indent-tabs-mode nil))
+ '(flycheck-display-errors-delay 0.5)
+ '(flycheck-display-errors-function
+   (lambda
+     (errors)
+     (let
+         ((messages
+           (mapcar
+            (function flycheck-error-message)
+            errors)))
+       (popup-tip
+        (mapconcat
+         (quote identity)
+         messages "
+")))))
+ '(helm-tramp-verbose 8)
+ '(indent-tabs-mode nil)
+ '(package-selected-packages
+   (quote
+    (yasnippet-snippets web-mode use-package undohist undo-tree tide smex smartparens region-bindings-mode rainbow-delimiters projectile prodigy popwin pallet nyan-mode multiple-cursors markdown-mode magit jedi iedit idle-highlight-mode htmlize helm-tramp groovy-mode gradle-mode ggtags flycheck-irony flycheck-cask expand-region exec-path-from-shell drag-stuff company-php clang-format auto-save-buffers-enhanced anzu))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -263,21 +289,19 @@ The PUSH argument is ignored."
     (add-hook 'php-mode-hook (lambda () (ggtags-mode 1)))
     (setq ggtags-mode-hook
           '(lambda ()
-             (local-set-key "\M-t" 'ggtags-find-definition)    ;関数へジャンプ
+             (local-set-key "\M-." 'ggtags-find-definition)    ;関数へジャンプ
              (local-set-key "\M-r" 'ggtags-find-reference)   ;関数の参照元へジャンプ
              (local-set-key "\M-s" 'ggtags-find-other-symbol) ;変数の定義元/参照先へジャンプ
              (local-set-key "\M-p" 'ggtags-prev-mark)   ;前のバッファに戻る
-             (local-set-key "\M-n" 'ggtags-next-mark)   ;前のバッファに戻る
+             (local-set-key "\M-n" 'ggtags-next-mark)   ;次のバッファに移る
              ))))
 
 (require 'gradle-mode)
 (gradle-mode 1)
 
-
 (add-hook 'js-mode-hook
           (lambda ()
-            (setq js-indent-level 4)))
-
+            (setq js-indent-level 2)))
 
 ;; company-php settings
 (add-hook 'php-mode-hook
@@ -294,3 +318,55 @@ The PUSH argument is ignored."
 
 ;; helm-tramp config
 (define-key global-map (kbd "C-c s") 'helm-tramp)
+
+
+;; tide mode settings from https://github.com/ananthakumaran/tide ;;;;;;;;;
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1)
+  (setq typescript-auto-indent-flag nil)
+  (setq typescript-indent-level 2))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; ;; Prettierを使うためコメントアウト
+;; ;; formats the buffer before saving
+;; (add-hook 'before-save-hook 'tide-format-before-save)
+
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (string-equal "tsx" (file-name-extension buffer-file-name))
+              (setup-tide-mode))))
+;; enable typescript-tslint checker
+(flycheck-add-mode 'typescript-tslint 'web-mode)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; prettier-js mode
+(require 'prettier-js)
+(add-hook 'typescript-mode-hook 'prettier-js-mode)
+(add-hook 'web-mode-hook
+          (lambda()
+            (prettier-js-mode)
+            (setq web-mode-code-indent-offset 2)
+            (setq web-mode-sql-indent-offset 2)
+            (setq web-mode-css-indent-offset 2)
+            (setq web-mode-attr-indent-offset 2)
+            (setq web-mode-attr-value-indent-offset 2)
+            (setq web-mode-markup-indent-offset 2)))
+;; (setq prettier-js-args '(
+;;   "--trailing-comma" "all"
+;;   "--bracket-spacing" "false"
+;; ))
