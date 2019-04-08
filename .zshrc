@@ -159,11 +159,16 @@ export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;
 ## デフォルトでemacsclientを使用する
 which emacsclient > /dev/null && alias emacs='emacsclient -nw -a ""'
 
-[ -d $HOME/.cask ] && export  PATH=/home/takuyaya/.cask/bin:$PATH
-[ -d $HOME/miniconda3 ] && export PATH=/home/takuyaya/miniconda3/bin:$PATH
 
+[ -d $HOME/.cask ] && export  PATH=$HOME/.cask/bin:$PATH
+[ -d $HOME/miniconda3 ] && export PATH=$HOME/miniconda3/bin:$PATH
+
+
+# NVMの設定
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 
 ##
 alias less='less -R'
@@ -178,13 +183,14 @@ alias less='less -R'
 ################################
 # zplug
 ###############################
-source ~/.zplug/init.zsh
+if [ -e "~/.zplug/init.zsh" ]; then
+    source ~/.zplug/init.zsh
 
-# use tmuximum
-zplug "arks22/tmuximum", as:command
+    # use tmuximum
+    zplug "arks22/tmuximum", as:command
 
-zplug load
-
+    zplug load
+fi
 
 
 ########################################
@@ -215,17 +221,20 @@ fi
 #     fi
 # }
 
+
 # 1. tmux内でsshした場合にwindows名を接続先ホスト名に変更する
 # 2. sshの代わりにsshrcコマンドを使用する。
-function ssh() {
-    if [ ! -z $TMUX ]; then
-        tmux rename-window ${${${@: -1}##*@}%%.*}
-        command sshrc "$@"
-        tmux set-window-option automatic-rename "on" 1>/dev/null
-    else
-        command sshrc "$@"
-    fi
-}
+type sshrc >/dev/null 2>&1 && \
+    function ssh() {
+        if [ ! -z $TMUX ]; then
+            tmux rename-window ${${${@: -1}##*@}%%.*}
+            command sshrc "$@"
+            tmux set-window-option automatic-rename "on" 1>/dev/null
+        else
+            command sshrc "$@"
+        fi
+    }
+
 
 # tmux attachした際にAgent転送を使えるようにする設定
 # https://qiita.com/sonots/items/2d7950a68da0a02ba7e4
@@ -254,8 +263,11 @@ if [ ! -z $TMUX ]; then
 fi
 
 # tmuximumの自動起動
-alias t="tmuximum"
-if [ -z $TMUX ]; then
-    tmuximum && exit
-fi
+type tmuximum >/dev/null 2>&1 && \
+    if [ -n "${REMOTEHOST}${SSH_CONNECTION}" ]; then
+        alias t="tmuximum"
+        if [ -z $TMUX ]; then
+            tmuximum && exit
+        fi
+    fi
 
