@@ -202,12 +202,7 @@ if [[ $TERM = screen ]] || [[ $TERM = screen-256color ]] ; then
     local FILECOUNT=0
     local MAXFILECOUNT=500 #ここを好きな保存ファイル数に変える。
     # zsh起動時に自動で$MAXFILECOUNTのファイル数以上ログファイルあれば消す
-    for file in `\find "$LOGDIR" -maxdepth 1 -type f -name "*.log" | sort --reverse`; do
-        FILECOUNT=`expr $FILECOUNT + 1`
-        if [ $FILECOUNT -ge $MAXFILECOUNT ]; then
-            rm -f $file
-        fi
-    done
+    find $HOME/tmux_logs/ -maxdepth 1 -type f -name "*.log" | sort --reverse | sed "1,${MAXFILECOUNT}d" | xargs -I % rm -f %
     [ ! -d $LOGDIR ] && mkdir -p $LOGDIR
     tmux  set-option default-terminal "screen" \; \
     pipe-pane        "cat >> $LOGDIR/$LOGFILE" \; \
