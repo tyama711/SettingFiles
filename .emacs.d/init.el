@@ -313,7 +313,7 @@ The PUSH argument is ignored."
 
 ;; tramp mode config
 (setq tramp-default-method "ssh")
-(setq tramp-auto-save-directory "~/emacs/tramp-autosave")
+(setq tramp-auto-save-directory "~/.emacs.d/tramp-autosave")
 (setq auto-save-buffers-enhanced-exclude-regexps '("^/ssh:" "/sudo:" "/multi:"))
 
 ;; helm-tramp config
@@ -370,3 +370,12 @@ The PUSH argument is ignored."
 ;;   "--trailing-comma" "all"
 ;;   "--bracket-spacing" "false"
 ;; ))
+
+;; projectile
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+
+;; helm-projectile
+;; (setq helm-projectile-fuzzy-match nil)
+(require 'helm-projectile)
+(helm-projectile-on)

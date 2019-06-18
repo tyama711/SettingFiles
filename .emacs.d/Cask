@@ -52,3 +52,4 @@
 (depends-on "tide")
 (depends-on "prettier-js")
 (depends-on "imenu-list")
+(depends-on "helm-projectile")
