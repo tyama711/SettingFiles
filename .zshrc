@@ -174,15 +174,15 @@ alias less='less -R'
 
 # command-line fuzzy finder
 # https://github.com/junegunn/fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
 
 
 
 ################################
 # zplug
 ###############################
-if [ -e "~/.zplug/init.zsh" ]; then
-    source ~/.zplug/init.zsh
+if [ -e "$HOME/.zplug/init.zsh" ]; then
+    source $HOME/.zplug/init.zsh
 
     # use tmuximum
     zplug "arks22/tmuximum", as:command
