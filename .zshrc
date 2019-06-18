@@ -22,12 +22,12 @@ colors
 setopt promptsubst
 case ${UID} in
     0)
-        PROMPT="%{${fg[cyan]}%}\$? $(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') %B%{${fg[red]}%}%/#%{${reset_color}%}%b "
+        PROMPT="%{${fg[cyan]}%}\$? \$(date +%H:%M:%S) $(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') %B%{${fg[red]}%}%/#%{${reset_color}%}%b "
         PROMPT2="%B%{${fg[red]}%}%_#%{${reset_color}%}%b "
         SPROMPT="%B%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%}%b "
         ;;
     *)
-        PROMPT="%{${fg[cyan]}%}\$? %{${fg[red]}%}%/%%%{${reset_color}%} "
+        PROMPT="%{${fg[cyan]}%}\$? \$(date +%H:%M:%S) %{${fg[red]}%}%/%%%{${reset_color}%} "
         PROMPT2="%{${fg[red]}%}%_%%%{${reset_color}%} "
         SPROMPT="%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%} "
         [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
@@ -160,6 +160,7 @@ which emacsclient > /dev/null && alias emacs='emacsclient -nw -a ""'
 
 [ -d $HOME/.cask ] && export  PATH=$HOME/.cask/bin:$PATH
 [ -d $HOME/miniconda3 ] && export PATH=$HOME/miniconda3/bin:$PATH
+[ -d $HOME/google-cloud-sdk ] && export PATH=$HOME/google-cloud-sdk/bin:$PATH
 
 
 # NVMの設定
@@ -247,6 +248,8 @@ if [ ! -z $TMUX ]; then
     case ${UID} in
         *)
             PROMPT="%{${fg[cyan]}%}\$? \$(date +%H:%M:%S) %{${fg[red]}%}%%%{${reset_color}%} "
+            [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
+                PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
             ;;
     esac
 fi
@@ -259,4 +262,3 @@ type tmuximum >/dev/null 2>&1 && \
             tmuximum && exit
         fi
     fi
-
