@@ -21,7 +21,7 @@
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
 (global-set-key (kbd "C-c C-c") 'comment-or-uncomment-region)
 
-;;; 複数行移動
+;; 複数行移動
 (global-set-key "\M-n" (kbd "C-u 5 C-n"))
 (global-set-key "\M-p" (kbd "C-u 5 C-p"))
 
@@ -333,7 +333,8 @@ The PUSH argument is ignored."
   ;; `M-x package-install [ret] company`
   (company-mode +1)
   (setq typescript-auto-indent-flag nil)
-  (setq typescript-indent-level 2))
+  (setq typescript-indent-level 2)
+  (global-set-key (kbd "M-s") 'tide-references))
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
@@ -365,11 +366,20 @@ The PUSH argument is ignored."
             (setq web-mode-css-indent-offset 2)
             (setq web-mode-attr-indent-offset 2)
             (setq web-mode-attr-value-indent-offset 2)
-            (setq web-mode-markup-indent-offset 2)))
+            (setq web-mode-markup-indent-offset 2)
+            (setq web-mode-enable-auto-closing t)))
 ;; (setq prettier-js-args '(
 ;;   "--trailing-comma" "all"
 ;;   "--bracket-spacing" "false"
 ;; ))
+
+;; SQLモードの設定
+(add-hook 'sql-mode-hook
+          (lambda()
+            (setq tab-width 4)))
+
+;; magit
+(global-set-key (kbd "C-x g") 'magit-status)
 
 ;; projectile
 (projectile-mode +1)
@@ -379,3 +389,5 @@ The PUSH argument is ignored."
 ;; (setq helm-projectile-fuzzy-match nil)
 (require 'helm-projectile)
 (helm-projectile-on)
+(define-key projectile-mode-map (kbd "C-c p s") 'helm-projectile-rg)
+

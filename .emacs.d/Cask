@@ -53,3 +53,4 @@
 (depends-on "prettier-js")
 (depends-on "imenu-list")
 (depends-on "helm-projectile")
+(depends-on "helm-rg")
