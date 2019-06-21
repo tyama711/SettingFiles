@@ -22,7 +22,9 @@ directory="$2"
 
 if [ ! -z $ssh_host ]; then
     echo "$ssh_host"
-else
+elif [ -n "${REMOTEHOST}${SSH_CONNECTION}" ]; then
     echo "${HOST%%.*}:$directory$git_info"
+else
+    echo "$directory$git_info"
 fi
 
