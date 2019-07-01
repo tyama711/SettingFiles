@@ -174,11 +174,6 @@ alias less='less -R'
 setopt ignoreeof
 
 
-# command-line fuzzy finder
-# https://github.com/junegunn/fzf
-[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
-
-
 ################################
 # zplug
 ###############################
@@ -194,7 +189,7 @@ if [ -e "$HOME/.zplug/init.zsh" ]; then
           as:command, \
           use:"bin/fzf", \
           hook-build:"./install --all --no-update-rc", \
-          hook-load:"alias f=fzf"
+          hook-load:"source $HOME/.fzf.zsh; alias f=fzf"
 
     # zplug "b4b4r07/enhancd", \
     #       use:init.sh
