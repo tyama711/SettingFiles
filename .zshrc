@@ -22,12 +22,12 @@ colors
 setopt promptsubst
 case ${UID} in
     0)
-        PROMPT="%{${fg[cyan]}%}\$? \$(date +%H:%M:%S) $(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') %B%{${fg[red]}%}%/#%{${reset_color}%}%b "
+        PROMPT="%{${fg[cyan]}%}\$? $(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') %c %B%{${fg[red]}%}%#%{${reset_color}%}%b "
         PROMPT2="%B%{${fg[red]}%}%_#%{${reset_color}%}%b "
         SPROMPT="%B%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%}%b "
         ;;
     *)
-        PROMPT="%{${fg[cyan]}%}\$? \$(date +%H:%M:%S) %{${fg[red]}%}%/%%%{${reset_color}%} "
+        PROMPT="%{${fg[cyan]}%}\$? %c %{${fg[red]}%}%#%{${reset_color}%} "
         PROMPT2="%{${fg[red]}%}%_%%%{${reset_color}%} "
         SPROMPT="%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%} "
         [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
@@ -171,12 +171,12 @@ export NVM_DIR="$HOME/.nvm"
 
 ##
 alias less='less -R'
+setopt ignoreeof
 
 
 # command-line fuzzy finder
 # https://github.com/junegunn/fzf
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
-
 
 
 ################################
@@ -185,8 +185,22 @@ alias less='less -R'
 if [ -e "$HOME/.zplug/init.zsh" ]; then
     source $HOME/.zplug/init.zsh
 
-    # use tmuximum
-    zplug "arks22/tmuximum", as:command
+    zplug "arks22/tmuximum", \
+          as:command, \
+          use:"tmuximum", \
+          hook-load:"alias t=tmuximum"
+
+    zplug "junegunn/fzf", \
+          as:command, \
+          use:"bin/fzf", \
+          hook-build:"./install --all --no-update-rc", \
+          hook-load:"alias f=fzf"
+
+    # zplug "b4b4r07/enhancd", \
+    #       use:init.sh
+    # export ENHANCD_FILTER=fzf
+    # export ENHANCD_DISABLE_HYPHEN=1
+    # export ENHANCD_DOT_ARG=...
 
     zplug load
 fi
@@ -247,7 +261,7 @@ fi
 if [ ! -z $TMUX ]; then
     case ${UID} in
         *)
-            PROMPT="%{${fg[cyan]}%}\$? \$(date +%H:%M:%S) %{${fg[red]}%}%%%{${reset_color}%} "
+            PROMPT="%{${fg[cyan]}%}\$? %c %{${fg[red]}%}%#%{${reset_color}%} "
             [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
                 PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
             ;;
@@ -256,9 +270,7 @@ fi
 
 # tmuximumの自動起動
 type tmuximum >/dev/null 2>&1 && \
-    if [ -n "${REMOTEHOST}${SSH_CONNECTION}" ]; then
-        alias t="tmuximum"
-        if [ -z $TMUX ]; then
-            tmuximum && exit
-        fi
+    if [ -n "${REMOTEHOST}${SSH_CONNECTION}" -a -z $TMUX ]; then
+        tmuximum && exit
     fi
+
