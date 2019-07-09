@@ -31,7 +31,7 @@ else
     zplug "junegunn/fzf-bin", \
           from:gh-r, \
           as:command, \
-          rename-to:f, \
+          rename-to:fzf, \
           use:"*linux*amd64*"
 
     zplug "BurntSushi/ripgrep", \
