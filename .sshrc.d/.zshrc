@@ -14,6 +14,13 @@ esac
 
 ## Default shell configuration
 #
+
+if [[ -t 0 ]]; then # インタラクティブモードで起動した場合
+  stty stop undef  # Ctrl-S（画面出力停止）を無効化
+  stty start undef # Ctrl-Q（画面出力再開）を無効化
+  stty eof undef   # Ctrl-D（ログアウト）を無効化
+fi
+
 # set prompt
 #
 autoload colors
@@ -21,18 +28,18 @@ colors
 
 setopt promptsubst
 case ${UID} in
-0)
-    PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') %B%{${fg[red]}%}%/#%{${reset_color}%}%b "
-    PROMPT2="%B%{${fg[red]}%}%_#%{${reset_color}%}%b "
-    SPROMPT="%B%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%}%b "
-    ;;
-*)
-    PROMPT="%{${fg[red]}%}%/%%%{${reset_color}%} "
-    PROMPT2="%{${fg[red]}%}%_%%%{${reset_color}%} "
-    SPROMPT="%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%} "
-    [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
-        PROMPT="%{${fg[cyan]}%}\$? $(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
-    ;;
+    0)
+        PROMPT="%{${fg[cyan]}%}\$? $(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') %c %B%{${fg[red]}%}%#%{${reset_color}%}%b "
+        PROMPT2="%B%{${fg[red]}%}%_#%{${reset_color}%}%b "
+        SPROMPT="%B%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%}%b "
+        ;;
+    *)
+        PROMPT="%{${fg[cyan]}%}\$? %c %{${fg[red]}%}%#%{${reset_color}%} "
+        PROMPT2="%{${fg[red]}%}%_%%%{${reset_color}%} "
+        SPROMPT="%{${fg[red]}%}%r is correct? [n,y,a,e]:%{${reset_color}%} "
+        [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
+            PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
+        ;;
 esac
 
 # auto change directory
@@ -146,90 +153,11 @@ alias df="df -h"
 
 alias su="su -l"
 
-
-# ## terminal configuration
-# #
-# case "${TERM}" in
-# screen)
-#     TERM=xterm
-#     ;;
-# esac
-
-# case "${TERM}" in
-# xterm|xterm-color)
-#     export LSCOLORS=exfxcxdxbxegedabagacad
-#     export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-#     zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
-#     ;;
-# kterm-color)
-#     stty erase '^H'
-#     export LSCOLORS=exfxcxdxbxegedabagacad
-#     export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-#     zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
-#     ;;
-# kterm)
-#     stty erase '^H'
-#     ;;
-# cons25)
-#     unset LANG
-#     export LSCOLORS=ExFxCxdxBxegedabagacad
-#     export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-#     zstyle ':completion:*' list-colors 'di=;34;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
-#     ;;
-# jfbterm-color)
-#     export LSCOLORS=gxFxCxdxBxegedabagacad
-#     export LS_COLORS='di=01;36:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-#     zstyle ':completion:*' list-colors 'di=;36;1' 'ln=;35;1' 'so=;32;1' 'ex=31;1' 'bd=46;34' 'cd=43;34'
-#     ;;
-# esac
-
-# # set terminal title including current directory
-# #
-# case "${TERM}" in
-# xterm|xterm-color|kterm|kterm-color)
-#     precmd() {
-#         echo -ne "\033]0;${USER}@${HOST%%.*}:${PWD}\007"
-#     }
-#     ;;
-# esac
-
-# ########################################
-# # tmuxの設定
-# # 自動ロギング
-# if [[ $TERM = screen ]] || [[ $TERM = screen-256color ]] ; then
-#     local LOGDIR=$HOME/tmux_logs
-#     local LOGFILE=$(hostname)_$(date +%Y-%m-%d_%H%M%S_%N.log)
-#     local FILECOUNT=0
-#     local MAXFILECOUNT=500 #ここを好きな保存ファイル数に変える。
-#     # zsh起動時に自動で$MAXFILECOUNTのファイル数以上ログファイルあれば消す
-#     for file in `\find "$LOGDIR" -maxdepth 1 -type f -name "*.log" | sort --reverse`; do
-#         FILECOUNT=`expr $FILECOUNT + 1`
-#         if [ $FILECOUNT -ge $MAXFILECOUNT ]; then
-#             rm -f $file
-#         fi
-#     done
-#     [ ! -d $LOGDIR ] && mkdir -p $LOGDIR
-#     tmux  set-option default-terminal "screen" \; \
-#     pipe-pane        "cat >> $LOGDIR/$LOGFILE" \; \
-#     display-message  "Started logging to $LOGDIR/$LOGFILE"
-# fi
-# ########################################
+export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:';
 
 ## load user .zshrc configuration file
 #
 [ -f ${HOME}/.zshrc.mine ] && source ${HOME}/.zshrc.mine
-
-# ## Macの場合はgsedを使用する
-# [ $(uname) = Darwin ] && which gsed > /dev/null && alias sed='gsed'
-
-# ## デフォルトでemacsclientを使用する
-# which emacsclient > /dev/null && alias emacs='emacsclient -nw -a ""'
-
-# [ -d $HOME/.cask ] && export  PATH=/home/takuyaya/.cask/bin:$PATH
-# [ -d $HOME/miniconda3 ] && export PATH=/home/takuyaya/miniconda3/bin:$PATH
-
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 ##
 alias less='less -R'
