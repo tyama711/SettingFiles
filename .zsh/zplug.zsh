@@ -15,35 +15,22 @@ zplug "motemen/ghq", \
       from:gh-r, \
       rename-to:ghq
 
-if [ $(uname) = Darwin ]; then
-    zplug "junegunn/fzf-bin", \
-          from:gh-r, \
-          as:command, \
-          rename-to:f, \
-          use:"*darwin*amd64*"
+zplug "junegunn/fzf", \
+      as:command, \
+      use:"bin/fzf", \
+      rename-to:"fzf", \
+      hook-build:"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64", \
+      hook-load:"source ~/.fzf.zsh"
 
-    zplug "BurntSushi/ripgrep", \
-          from:gh-r, \
-          as:command, \
-          rename-to:rg, \
-          use:"*darwin*"
-else
-    zplug "junegunn/fzf-bin", \
-          from:gh-r, \
-          as:command, \
-          rename-to:fzf, \
-          use:"*linux*amd64*"
+zplug "github/hub", \
+      from:gh-r, \
+      as:command, \
+      rename-to:"hub", \
+      hook-build:'mkdir -p $HOME/.zsh/completions && cp $(find . -name hub.zsh_completion) $HOME/.zsh/completions/_hub', \
+      hook-load:'eval $(hub alias -s)'
 
-    zplug "BurntSushi/ripgrep", \
-          from:gh-r, \
-          as:command, \
-          rename-to:rg, \
-          use:"*x86_64*linux*"
-fi
-
-# zplug "b4b4r07/enhancd", \
-    #       use:init.sh
-# export ENHANCD_FILTER=fzf
-# export ENHANCD_DISABLE_HYPHEN=1
-# export ENHANCD_DOT_ARG=...
+zplug "BurntSushi/ripgrep", \
+      from:gh-r, \
+      as:command, \
+      rename-to:rg
 

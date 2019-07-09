@@ -21,6 +21,7 @@ autoload -Uz colors && colors
 
 ## Completion configuration
 #
+fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 
 zstyle ':completion:*' menu select
@@ -35,10 +36,10 @@ autoload zed
 
 
 ## Macの場合はgsedを使用する
-[ $(uname) = Darwin ] && has gsed > /dev/null && alias sed='gsed'
+[ $(uname) = Darwin ] && which gsed > /dev/null && alias sed='gsed'
 
 ## デフォルトでemacsclientを使用する
-has emacsclient && alias emacs='emacsclient -nw -a ""'
+which emacsclient > /dev/null && alias emacs='emacsclient -nw -a ""'
 
 # CaskへPathを通す
 [ -d $HOME/.cask ] && export  PATH=$HOME/.cask/bin:$PATH
