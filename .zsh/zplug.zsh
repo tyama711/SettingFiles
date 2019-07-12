@@ -34,3 +34,8 @@ zplug "BurntSushi/ripgrep", \
       as:command, \
       rename-to:rg
 
+zplug "stedolan/jq", \
+      as:command, \
+      from:gh-r, \
+      rename-to:jq
+
