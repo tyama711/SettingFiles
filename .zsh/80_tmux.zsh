@@ -53,3 +53,9 @@ if [ ! -z $TMUX ]; then
             ;;
     esac
 fi
+
+# tmuxで新規ペインを開いたときになぜか.tmux.confの
+# default-terminalの設定が効かないので、ここで明示的に設定する
+if [ ! -x $TMUX ]; then
+    export TERM=screen-256color
+fi
