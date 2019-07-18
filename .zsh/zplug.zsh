@@ -38,4 +38,3 @@ zplug "stedolan/jq", \
       as:command, \
       from:gh-r, \
       rename-to:jq
-

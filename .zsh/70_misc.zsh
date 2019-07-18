@@ -28,21 +28,8 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
 zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
 
+compdef g=ghq
 
 ## zsh editor
 #
 autoload zed
-
-
-
-## Macの場合はgsedを使用する
-[ $(uname) = Darwin ] && which gsed > /dev/null && alias sed='gsed'
-
-## デフォルトでemacsclientを使用する
-has emacsclient && alias e='emacsclient -nw -a ""'
-
-# CaskへPathを通す
-[ -d $HOME/.cask ] && export  PATH=$HOME/.cask/bin:$PATH
-
-# ghqはうちにくい
-has ghq && alias g=ghq

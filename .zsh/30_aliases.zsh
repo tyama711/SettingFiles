@@ -21,3 +21,12 @@ alias su="su -l"
 
 alias less='less -R'
 
+## Macの場合はgsedを使用する
+[ $(uname) = Darwin ] && has gsed && alias sed='gsed'
+
+## デフォルトでemacsclientを使用する
+has emacsclient && alias e='emacsclient -nw -a ""'
+
+# ghqはうちにくい
+has ghq && alias g=ghq
+
