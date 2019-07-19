@@ -33,3 +33,14 @@ compdef g=ghq
 ## zsh editor
 #
 autoload zed
+
+if [[ -t 0 ]]; then
+    # Disable Ctrl+D
+    stty eof undef
+
+    # Disable Ctrl+S
+    stty stop undef
+
+    # Disable Ctrl+Q
+    stty start undef
+fi
