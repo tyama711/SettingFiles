@@ -28,7 +28,8 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
 zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
 
-compdef g=ghq
+compdef gh=ghq
+compdef g=git
 
 ## zsh editor
 #

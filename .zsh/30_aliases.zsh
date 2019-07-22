@@ -28,5 +28,6 @@ alias less='less -R'
 has emacsclient && alias e='emacsclient -nw -a ""'
 
 # ghqはうちにくい
-has ghq && alias g=ghq
+has ghq && alias gh=ghq
+has git && alias g=git
 
