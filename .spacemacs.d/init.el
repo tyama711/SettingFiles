@@ -303,7 +303,13 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
-  )
+
+  (setq exec-path-from-shell-check-startup-files nil)
+
+  ;; 以下がないとpackage-installに失敗する
+  ;; https://www.reddit.com/r/emacs/comments/cdei4p/failed_to_download_gnu_archive_bad_request/
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+ )
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -324,7 +330,7 @@ you should place your code here."
   ;; counsel-M-x の初期文字列を空にする
   (with-eval-after-load 'ivy
     (setq ivy-initial-inputs-alist nil)
-    )
+  )
 
   ;; https://stackoverflow.com/questions/13517910/yank-does-not-paste-text-when-using-emacs-over-ssh
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
