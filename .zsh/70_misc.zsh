@@ -45,3 +45,5 @@ if [[ -t 0 ]]; then
     # Disable Ctrl+Q
     stty start undef
 fi
+
+[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh

@@ -19,8 +19,7 @@ zplug "junegunn/fzf", \
       as:command, \
       use:"bin/fzf", \
       rename-to:"fzf", \
-      hook-build:"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64", \
-      hook-load:"source ~/.fzf.zsh"
+      hook-build:"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64"
 
 zplug "github/hub", \
       from:gh-r, \
