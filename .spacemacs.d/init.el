@@ -310,6 +310,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
   ;; 以下がないとpackage-installに失敗する
   ;; https://www.reddit.com/r/emacs/comments/cdei4p/failed_to_download_gnu_archive_bad_request/
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
  )
 
 (defun dotspacemacs/user-config ()
@@ -383,6 +384,27 @@ you should place your code here."
   (if (eq system-type 'darwin)
       (setq interprogram-cut-function 'paste-to-osx
             interprogram-paste-function 'copy-from-osx))
+
+  ;; sql mode configuration
+  (add-hook 'sql-mode-hook
+            (lambda ()
+              (sqlind-minor-mode)
+              (setq sqlind-basic-offset 4)))
+
+  (with-eval-after-load 'sql-indent
+    (defvar my-sql-indentation-offsets-alist
+      `((select-clause 0)
+        (insert-clause 0)
+        (delete-clause 0)
+        (update-clause 0)
+        (select-table-continuation +)
+        (select-join-condition +)
+        ,@sqlind-default-indentation-offsets-alist))
+
+    (add-hook 'sqlind-minor-mode-hook
+              (lambda ()
+                (setq sqlind-indentation-offsets-alist
+                      my-sql-indentation-offsets-alist))))
  )
 
 ;; Do not write anything past this comment. This is where Emacs will
