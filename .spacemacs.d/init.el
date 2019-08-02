@@ -320,6 +320,10 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  ;; activate mouse wheel
+  (global-set-key [mouse-4] 'scroll-down-line)
+  (global-set-key [mouse-5] 'scroll-up-line)
+
   ;; C-hをBackspaceへ変換する。Helpは<F1>で使える
   (define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))
 
