@@ -43,7 +43,7 @@ This function should only modify configuration layer settings."
      ;; better-defaults
      emacs-lisp
      git
-     helm
+     ivy
      markdown
      multiple-cursors
      org
