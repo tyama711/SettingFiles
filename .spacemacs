@@ -542,20 +542,25 @@ before packages are loaded."
             interprogram-paste-function 'copy-from-osx))
 
   ;; sql mode configuration
+  (add-to-list 'auto-mode-alist '("\\.hql\\'" . sql-mode))
+
   (add-hook 'sql-mode-hook
             (lambda ()
               (sqlind-minor-mode)
               (setq sqlind-basic-offset 4)))
 
+  ;; config doc: https://github.com/alex-hhh/emacs-sql-indent/blob/master/sql-indent.org
   (with-eval-after-load 'sql-indent
     (defvar my-sql-indentation-offsets-alist
-      `((select-clause 0)
-        (insert-clause 0)
-        (delete-clause 0)
-        (update-clause 0)
+      `(
         (select-table-continuation +)
         (select-join-condition +)
-        ,@sqlind-default-indentation-offsets-alist))
+        (select-column +)
+        (nested-statement-open sqlind-use-anchor-indentation +)
+        (nested-statement-continuation sqlind-use-previous-line-indentation)
+        (nested-statement-close sqlind-use-anchor-indentation)
+        (in-select-clause +)
+        ))
 
     (add-hook 'sqlind-minor-mode-hook
               (lambda ()
