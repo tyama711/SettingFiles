@@ -474,6 +474,12 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
+  (spacemacs/declare-prefix "ps" "search project")
+  (spacemacs/set-leader-keys "ps" 'spacemacs/helm-project-smart-do-search "test")
+  (spacemacs/declare-prefix "pS" "search project w/input")
+  (spacemacs/set-leader-keys "pS" 'spacemacs/helm-project-smart-do-search-region-or-symbol)
+
+  ;; (spacemacs/set-leader-keys-for-major-mode 'typescript-mode "gd" 'tide-jump-to-definition)
   ;; ;; bind query-replace-regexp to M-%
   ;; (global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
   ;; (global-set-key (kbd "C-s") 'isearch-forward-regexp)
