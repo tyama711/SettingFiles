@@ -43,7 +43,7 @@ This function should only modify configuration layer settings."
      ;; better-defaults
      emacs-lisp
      git
-     ivy
+     helm
      markdown
      multiple-cursors
      org
@@ -474,6 +474,10 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
+  ;; ;; bind query-replace-regexp to M-%
+  ;; (global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
+  ;; (global-set-key (kbd "C-s") 'isearch-forward-regexp)
+
   ;; resize windows automatically
   (golden-ratio-mode 1)
 
@@ -481,6 +485,7 @@ before packages are loaded."
   (global-set-key [mouse-4] 'scroll-down-line)
   (global-set-key [mouse-5] 'scroll-up-line)
 
+  ;; powerline configuration
   (setq powerline-image-apple-rgb t)
   (setq powerline-default-separator 'nil)
 
@@ -567,8 +572,8 @@ before packages are loaded."
                 (setq sqlind-indentation-offsets-alist
                       my-sql-indentation-offsets-alist))))
 
-  ;; typescript mode configuration
-  (spacemacs/set-leader-keys-for-major-mode 'typescript-mode "gd" 'tide-jump-to-definition)
+  ;; ;; typescript mode configuration
+  ;; (spacemacs/set-leader-keys-for-major-mode 'typescript-mode "gd" 'tide-jump-to-definition)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
