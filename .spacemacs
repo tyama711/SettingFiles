@@ -478,7 +478,23 @@ before packages are loaded."
   ;; (global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
   ;; (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 
-  ;; resize windows automatically
+  ;; daemon mode場合にmode lineが見辛い
+  ;; https://github.com/syl20bnr/spacemacs/issues/10916
+  (set-face-attribute 'spacemacs-normal-face nil :foreground "#262626")
+  (set-face-attribute 'spacemacs-hybrid-face nil :foreground "#262626")
+  (set-face-attribute 'spacemacs-emacs-face nil :foreground "#262626")
+  (set-face-attribute 'spacemacs-evilified-face nil :foreground "#262626")
+  (set-face-attribute 'spacemacs-visual-face nil :foreground "#262626")
+  (set-face-attribute 'spacemacs-replace-face nil :foreground "#262626")
+  ;; etc
+
+  ;; centering matching lines by evil-ex-search
+  (advice-add 'evil-ex-search-next :after
+              (lambda (&rest x) (evil-scroll-line-to-center (line-number-at-pos))))
+  (advice-add 'evil-ex-search-previous :after
+              (lambda (&rest x) (evil-scroll-line-to-center (line-number-at-pos))))
+
+ ;; resize windows automatically
   (golden-ratio-mode 1)
 
   ;; activate mouse wheel
