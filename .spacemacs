@@ -492,6 +492,7 @@ before packages are loaded."
   (set-face-attribute 'spacemacs-evilified-face nil :foreground "#262626")
   (set-face-attribute 'spacemacs-visual-face nil :foreground "#262626")
   (set-face-attribute 'spacemacs-replace-face nil :foreground "#262626")
+  (set-face-attribute 'spacemacs-insert-face nil :foreground "#262626")
   ;; etc
 
   ;; centering matching lines by evil-ex-search
