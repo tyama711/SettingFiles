@@ -43,16 +43,16 @@ else
     echo "no ssh-agent"
 fi
 
-# tmuxの場合はプロンプトにパスを表示しない
-if [ ! -z $TMUX ]; then
-    case ${UID} in
-        *)
-            PROMPT="%{${fg[cyan]}%}\$? %c %{${fg[red]}%}%#%{${reset_color}%} "
-            [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
-                PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
-            ;;
-    esac
-fi
+# # tmuxの場合はプロンプトにパスを表示しない
+# if [ ! -z $TMUX ]; then
+#     case ${UID} in
+#         *)
+#             PROMPT="%{${fg[cyan]}%}\$? %c %{${fg[red]}%}%#%{${reset_color}%} "
+#             [ -n "${REMOTEHOST}${SSH_CONNECTION}" ] && 
+#                 PROMPT="%{${fg[cyan]}%}$(echo ${HOST%%.*} | tr '[a-z]' '[A-Z]') ${PROMPT}"
+#             ;;
+#     esac
+# fi
 
 # tmuxで新規ペインを開いたときになぜか.tmux.confの
 # default-terminalの設定が効かないので、ここで明示的に設定する

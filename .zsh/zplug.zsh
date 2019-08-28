@@ -37,3 +37,7 @@ zplug "stedolan/jq", \
       as:command, \
       from:gh-r, \
       rename-to:jq
+
+zplug "zsh-users/zsh-autosuggestions", \
+      as:plugin, \
+      use:zsh-autosuggestions.zsh
