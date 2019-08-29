@@ -1,16 +1,24 @@
 function git_info() {
     if git_status=$(cd $1 && git status 2>/dev/null ); then
         git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
-        case $git_status in
-            *Changes\ not\ staged* ) state="+" ;;
-            *Changes\ to\ be\ committed* ) state="?" ;;
-            *Your\ branch\ is\ ahead* ) state="!" ;;
-            * ) state="✔" ;;
-        esac
+        state=""
+
+        if [[ $git_status =~ ".*Your branch is ahead.*" ]]; then
+            state="$state!"
+        fi
+        if [[ $git_status =~ ".*Changes to be committed.*" ]]; then
+            state="$state?"
+        fi
+        if [[ $git_status =~ ".*Changes not staged.*" ]]; then
+            state="$state+"
+        fi
+        if [[ $state = "" ]]; then
+            state="✔"
+        fi
         if [[ $git_branch = "master" ]]; then
-            git_info=" [${git_branch}%{${fg[green]}%}${state}]%{${fg[cyan]}%}"
+            git_info=" [${git_branch}%{${fg[green]}%}${state}%{${fg[cyan]}%}]"
         else
-            git_info=" [${git_branch}%{${fg[green]}%}${state}]%{${fg[cyan]}%}"
+            git_info=" [${git_branch}%{${fg[green]}%}${state}%{${fg[cyan]}%}]"
         fi
     else
         git_info=""
