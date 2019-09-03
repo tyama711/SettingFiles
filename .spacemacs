@@ -58,6 +58,7 @@ This function should only modify configuration layer settings."
      javascript
      (sql :variables sql-capitalize-keywords t)
      csv
+     japanese
      )
 
    ;; List of additional packages that will be installed without being
@@ -600,6 +601,15 @@ before packages are loaded."
 
   ;; ;; typescript mode configuration
   ;; (spacemacs/set-leader-keys-for-major-mode 'typescript-mode "gd" 'tide-jump-to-definition)
+
+  ;; japanese layer configuration ;;;;;;;;;;;;;;
+  ;; use helm with migemo
+  (with-eval-after-load "helm"
+    (helm-migemo-mode 1))
+
+  ;; 半角と全角の間にスペースを表示
+  (global-pangu-spacing-mode 1)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
