@@ -43,7 +43,8 @@ This function should only modify configuration layer settings."
      ;; better-defaults
      emacs-lisp
      git
-     helm
+     (helm :variables
+          helm-ag-use-temp-buffer t)
      markdown
      multiple-cursors
      org
@@ -475,20 +476,38 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
+  ;; if the first 30 line of the opened file is too long, enable fundamental by default
+  (defun get-nth-line-length (n)
+    "Length of the Nth line."
+    (save-excursion
+      (goto-char (point-min))
+      (if (zerop (forward-line (1- n)))
+          (- (line-end-position)
+             (line-beginning-position)))))
+
+  (defun +my/check-minified-file ()
+    (and
+     (not (member (file-name-extension (buffer-file-name))
+                  '("org" "md" "markdown" "txt" "rtf")))
+     (cl-loop for i from 1 to (min 30 (count-lines (point-min) (point-max)))
+              if (> (get-nth-line-length i) 1000)
+              return t
+              finally return nil)))
+
+  (add-to-list 'magic-mode-alist (cons #'+my/check-minified-file 'fundamental-mode))
+
+  ;; keybind
   (spacemacs/declare-prefix "ps" "search project")
-  (spacemacs/set-leader-keys "ps" 'spacemacs/helm-project-smart-do-search "test")
+  (spacemacs/set-leader-keys "ps" 'spacemacs/helm-project-smart-do-search)
   (spacemacs/declare-prefix "pS" "search project w/input")
   (spacemacs/set-leader-keys "pS" 'spacemacs/helm-project-smart-do-search-region-or-symbol)
-
-  ;; helm-ag persistent action(TAB)でファイルプレビュー
-  (custom-set-variables '(helm-ag-use-temp-buffer t))
 
   ;; (spacemacs/set-leader-keys-for-major-mode 'typescript-mode "gd" 'tide-jump-to-definition)
   ;; ;; bind query-replace-regexp to M-%
   ;; (global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
   ;; (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 
-  ;; daemon mode場合にmode lineが見辛い
+  ;; daemon mode 場合に mode line が見辛い
   ;; https://github.com/syl20bnr/spacemacs/issues/10916
   (set-face-attribute 'spacemacs-normal-face nil :foreground "#262626")
   (set-face-attribute 'spacemacs-hybrid-face nil :foreground "#262626")
@@ -516,16 +535,11 @@ before packages are loaded."
   (setq powerline-image-apple-rgb t)
   (setq powerline-default-separator 'nil)
 
-  ;; C-hをBackspaceへ変換する。Helpは<F1>で使える
+  ;; C-h を Backspace へ変換する。Help は<F1>で使える
   (define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))
 
   ;; avy configuration
   (custom-set-variables '(avy-style 'pre))
-
-  ;; counsel-M-x の初期文字列を空にする
-  (with-eval-after-load 'ivy
-    (setq ivy-initial-inputs-alist nil)
-  )
 
   ;; タブと全角スペースを描画する
   ;; see whitespace.el for more details
@@ -575,6 +589,7 @@ before packages are loaded."
 
   ;; sql mode configuration
   (add-to-list 'auto-mode-alist '("\\.hql\\'" . sql-mode))
+  (add-to-list 'auto-mode-alist '("\\.btq\\'" . sql-mode))
 
   (add-hook 'sql-mode-hook
             (lambda ()
@@ -599,9 +614,6 @@ before packages are loaded."
                 (setq sqlind-indentation-offsets-alist
                       my-sql-indentation-offsets-alist))))
 
-  ;; ;; typescript mode configuration
-  ;; (spacemacs/set-leader-keys-for-major-mode 'typescript-mode "gd" 'tide-jump-to-definition)
-
   ;; japanese layer configuration ;;;;;;;;;;;;;;
   ;; use helm with migemo
   (with-eval-after-load "helm"
@@ -609,7 +621,15 @@ before packages are loaded."
 
   ;; 半角と全角の間にスペースを表示
   (global-pangu-spacing-mode 1)
+  (setq pangu-spacing-real-insert-separtor nil)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;; Persistent UNDO Tree
+  (setq undo-tree-auto-save-history t
+        undo-tree-history-directory-alist
+        `(("." . ,(concat spacemacs-cache-directory "undo"))))
+  (unless (file-exists-p (concat spacemacs-cache-directory "undo"))
+    (make-directory (concat spacemacs-cache-directory "undo")))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
