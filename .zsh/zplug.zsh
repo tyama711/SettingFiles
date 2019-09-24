@@ -20,8 +20,7 @@ zplug "github/hub", \
       from:gh-r, \
       as:command, \
       rename-to:"hub", \
-      hook-build:'mkdir -p $HOME/.zsh/completions && cp $(find . -name hub.zsh_completion) $HOME/.zsh/completions/_hub', \
-      hook-load:'eval $(hub alias -s)'
+      hook-build:'mkdir -p $HOME/.zsh/completions && cp $(find . -name hub.zsh_completion) $HOME/.zsh/completions/_hub'
 
 zplug "BurntSushi/ripgrep", \
       from:gh-r, \

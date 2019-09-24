@@ -212,6 +212,11 @@ if [[ -f ~/.zplug/init.zsh ]]; then
     #     echo
     # fi
     zplug load
+
+    #################################
+    # post load configuration
+    #################################
+    eval $(hub alias -s)
 fi
 
 
