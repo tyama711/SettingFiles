@@ -1,7 +1,6 @@
 ################################
 # zplug
 ################################
-zplug "~/.zsh", from:local, use:"<->_*.zsh"
 
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
@@ -14,14 +13,14 @@ zplug "junegunn/fzf", \
       as:command, \
       use:"bin/fzf", \
       rename-to:"fzf", \
-      hook-build:"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64"
+      hook-build:"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64", \
+      hook-load:"[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh"
 
 zplug "github/hub", \
       from:gh-r, \
       as:command, \
       rename-to:"hub", \
-      hook-build:'mkdir -p $HOME/.zsh/completions && cp $(find . -name hub.zsh_completion) $HOME/.zsh/completions/_hub', \
-      hook-load:'eval $(hub alias -s)'
+      hook-build:'mkdir -p $HOME/.zsh/completions && cp $(find . -name hub.zsh_completion) $HOME/.zsh/completions/_hub'
 
 zplug "BurntSushi/ripgrep", \
       from:gh-r, \
@@ -33,6 +32,17 @@ zplug "stedolan/jq", \
       from:gh-r, \
       rename-to:jq
 
-zplug "zsh-users/zsh-autosuggestions", \
-      as:plugin, \
-      use:zsh-autosuggestions.zsh
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
+zplug "zsh-users/zsh-autosuggestions"
+
+zplug "zsh-users/zsh-completions"
+
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+
+if [[ $ZSH_MAJOR_VERSION -gt 5 || ( $ZSH_MAJOR_VERSION -ge 5 && $ZSH_MINOR_VERSION -ge 1 ) ]]; then
+    zplug "romkatv/powerlevel10k", as:theme
+fi
+
+zplug "seebi/dircolors-solarized", \
+      hook-build:"dircolors -b dircolors.256dark > c.zsh", \
+      use:"c.zsh"
