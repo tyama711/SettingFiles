@@ -21,6 +21,7 @@ zplug "github/hub", \
       as:command, \
       rename-to:"hub", \
       hook-build:'mkdir -p $HOME/.zsh/completions && cp $(find . -name hub.zsh_completion) $HOME/.zsh/completions/_hub'
+export FPATH="${HOME}/.zsh/completions:${FPATH}"
 
 zplug "BurntSushi/ripgrep", \
       from:gh-r, \
