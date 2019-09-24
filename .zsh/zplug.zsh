@@ -5,11 +5,6 @@ zplug "~/.zsh", from:local, use:"<->_*.zsh"
 
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-zplug "arks22/tmuximum", \
-      as:command, \
-      use:"tmuximum", \
-      rename-to:"t"
-
 zplug "motemen/ghq", \
       as:command, \
       from:gh-r, \
