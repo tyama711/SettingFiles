@@ -510,6 +510,9 @@ before packages are loaded."
   (spacemacs/declare-prefix "pS" "search project w/input")
   (spacemacs/set-leader-keys "pS" #'spacemacs/helm-project-smart-do-search-region-or-symbol)
 
+  ;; helm-ag persistent action(TAB)でファイルプレビュー
+  (custom-set-variables '(helm-ag-use-temp-buffer t))
+
   ;; (spacemacs/set-leader-keys-for-major-mode 'typescript-mode "gd" 'tide-jump-to-definition)
   ;; ;; bind query-replace-regexp to M-%
   ;; (global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
@@ -548,6 +551,11 @@ before packages are loaded."
 
   ;; avy configuration
   (custom-set-variables '(avy-style 'pre))
+
+  ;; counsel-M-x の初期文字列を空にする
+  (with-eval-after-load 'ivy
+    (setq ivy-initial-inputs-alist nil)
+  )
 
   ;; タブと全角スペースを描画する
   ;; see whitespace.el for more details
