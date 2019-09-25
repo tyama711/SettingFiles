@@ -3,10 +3,6 @@ if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z "${TMUX}" ]]; then
 fi
 
 
-ZSH_MAJOR_VERSION=$(echo $ZSH_VERSION | cut -d "." -f 1)
-ZSH_MINOR_VERSION=$(echo $ZSH_VERSION | cut -d "." -f 2)
-
-
 has() {
     type "${1:?too few arguments}" &>/dev/null
 }
@@ -17,6 +13,8 @@ if [[ -n "${TMUX}" ]]; then
 fi
 
 
+autoload -Uz is-at-least
+
 ## historical backward/forward search with linehead string binded to ^P/^N
 #
 autoload history-search-end
@@ -24,8 +22,8 @@ zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 bindkey "^p" history-beginning-search-backward-end
 bindkey "^n" history-beginning-search-forward-end
-bindkey "\\ep" history-beginning-search-backward-end
-bindkey "\\en" history-beginning-search-forward-end
+# bindkey "\\ep" history-beginning-search-backward-end
+# bindkey "\\en" history-beginning-search-forward-end
 
 
 # reverse menu completion binded to Shift-Tab
@@ -34,7 +32,7 @@ bindkey "\e[Z" reverse-menu-complete
 
 case "${OSTYPE}" in
     freebsd*|darwin*)
-        has gls && alias ls="gls --color"
+        has gls && alias ls="gls --color" || alias ls="ls -G -w"
         has gdircolors && alias dircolors=gdircolors
         has gsed && alias sed=gsed
         ;;
@@ -100,7 +98,7 @@ if [[ -t 0 ]]; then
 fi
 
 
-if [[ $ZSH_MAJOR_VERSION -lt 5 || ( $ZSH_MAJOR_VERSION -le 5 && $ZSH_MINOR_VERSION -lt 1 ) ]]; then
+if ( ! is-at-least 5.1 ); then
     function git_info() {
         if git_status=$(cd $1 && git status 2>/dev/null ); then
             git_branch="$(echo $git_status| awk 'NR==1 {print $3}')"
