@@ -215,6 +215,8 @@ if [[ -f ~/.zplug/init.zsh ]]; then
     # post load configuration
     #################################
     eval $(hub alias -s)
+    bindkey '^[p' history-substring-search-up
+    bindkey '^[n' history-substring-search-down
 fi
 
 
