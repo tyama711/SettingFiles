@@ -41,7 +41,7 @@ zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-history-substring-search", defer:3
 
-if [[ $ZSH_MAJOR_VERSION -gt 5 || ( $ZSH_MAJOR_VERSION -ge 5 && $ZSH_MINOR_VERSION -ge 1 ) ]]; then
+if ( is-at-least 5.1 ); then
     zplug "romkatv/powerlevel10k", as:theme
 fi
 
