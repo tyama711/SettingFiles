@@ -33,6 +33,8 @@ zplug "stedolan/jq", \
       from:gh-r, \
       rename-to:jq
 
+zplug "arks22/tmuximum", as:command
+
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
 zplug "zsh-users/zsh-autosuggestions"
 
