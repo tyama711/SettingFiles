@@ -1,8 +1,3 @@
-if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z "${TMUX}" ]]; then
-    tmux && exit
-fi
-
-
 has() {
     type "${1:?too few arguments}" &>/dev/null
 }
@@ -217,6 +212,11 @@ if [[ -f ~/.zplug/init.zsh ]]; then
     eval $(hub alias -s)
     bindkey '^[p' history-substring-search-up
     bindkey '^[n' history-substring-search-down
+fi
+
+
+if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z "${TMUX}" ]]; then
+    has tmuximum && tmuximum && exit
 fi
 
 
