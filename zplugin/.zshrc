@@ -47,7 +47,7 @@ alias ll="ls -l"
 alias du="du -h"
 alias df="df -h"
 alias su="su -l"
-alias less='less -R'
+alias less='less -r'
 alias ls="ls --color"
 
 # Macの場合はgsedを使用する
@@ -122,8 +122,36 @@ zplugin ice wait from"gh-r" as"completion" id-as"hub_completion" \
 zplugin light github/hub
 
 ## plugin section
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+add-zsh-hook chpwd chpwd_recent_dirs
+
+bindkey '^xb' anyframe-widget-cdr
+bindkey '^x^b' anyframe-widget-checkout-git-branch
+bindkey '^xr' anyframe-widget-execute-history
+bindkey '^x^r' anyframe-widget-execute-history
+bindkey '^xi' anyframe-widget-put-history
+bindkey '^x^i' anyframe-widget-put-history
+bindkey '^xg' anyframe-widget-cd-ghq-repository
+bindkey '^x^g' anyframe-widget-cd-ghq-repository
+bindkey '^xk' anyframe-widget-kill
+bindkey '^x^k' anyframe-widget-kill
+bindkey '^xe' anyframe-widget-insert-git-branch
+bindkey '^x^e' anyframe-widget-insert-git-branch
+
+# expressly specify to use fzf
+zstyle ":anyframe:selector:" use fzf
+# specify path and options for peco, percol, or fzf
+zstyle ":anyframe:selector:fzf:" command 'fzf --extended'
+
+zplugin ice wait
+zplugin light mollifier/anyframe
+
+zplugin ice wait
+zplugin light zsh-users/zsh-completions
+
 zplugin light romkatv/powerlevel10k
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 zplugin ice wait atclone"dircolors -b dircolors.256dark > c.zsh" \
         atpull'%atclone' pick"c.zsh" nocompile'!'
@@ -133,13 +161,14 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
 zplugin ice wait atload'_zsh_autosuggest_start'
 zplugin light zsh-users/zsh-autosuggestions
 
-zplugin ice wait
+zplugin ice wait atinit"zpcompinit"
 zplugin light zsh-users/zsh-syntax-highlighting
 
+zplugin ice wait \
+        atload'bindkey "^[p" history-substring-search-up' \
+        atload'bindkey "^[n" history-substring-search-down'
+zplugin light zsh-users/zsh-history-substring-search
 ### End of Zplugin configuration
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 [[ -f ${HOME}/.zshrc.local ]] && source ${HOME}/.zshrc.local
 
