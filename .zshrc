@@ -2,13 +2,18 @@ has() {
     type "${1:?too few arguments}" &>/dev/null
 }
 
-
-if [[ -n "${TMUX}" ]]; then
-    export TERM=screen-256color
-fi
-
+rationalise-dot() {
+    if [[ $LBUFFER = *.. ]]; then
+        LBUFFER+=/..
+    else
+        LBUFFER+=.
+    fi
+}
+zle -N rationalise-dot
+bindkey . rationalise-dot
 
 autoload -Uz is-at-least
+
 
 ## historical backward/forward search with linehead string binded to ^P/^N
 #
@@ -189,6 +194,10 @@ else
     echo "no ssh-agent"
 fi
 
+if [[ -n "${TMUX}" ]]; then
+    export TERM=screen-256color
+fi
+
 
 ###############################
 # zplug
@@ -210,10 +219,23 @@ if [[ -f ~/.zplug/init.zsh ]]; then
     # post load configuration
     #################################
     eval $(hub alias -s)
+
     bindkey '^[p' history-substring-search-up
     bindkey '^[n' history-substring-search-down
-fi
 
+    bindkey '^xb'  anyframe-widget-cdr
+    bindkey '^x^b' anyframe-widget-checkout-git-branch
+    bindkey '^xr'  anyframe-widget-execute-history
+    bindkey '^x^r' anyframe-widget-execute-history
+    bindkey '^xi'  anyframe-widget-put-history
+    bindkey '^x^i' anyframe-widget-put-history
+    bindkey '^xg'  anyframe-widget-cd-ghq-repository
+    bindkey '^x^g' anyframe-widget-cd-ghq-repository
+    bindkey '^xk'  anyframe-widget-kill
+    bindkey '^x^k' anyframe-widget-kill
+    bindkey '^xe'  anyframe-widget-insert-git-branch
+    bindkey '^x^e' anyframe-widget-insert-git-branchfi
+fi
 
 if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z "${TMUX}" ]]; then
     has tmuximum && tmuximum && exit

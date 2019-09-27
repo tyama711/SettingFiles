@@ -35,6 +35,14 @@ zplug "stedolan/jq", \
 
 zplug "arks22/tmuximum", as:command
 
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+add-zsh-hook chpwd chpwd_recent_dirs
+# expressly specify to use fzf
+zstyle ":anyframe:selector:" use fzf
+# specify path and options for peco, percol, or fzf
+zstyle ":anyframe:selector:fzf:" command 'fzf --extended'
+zplug "mollifier/anyframe"
+
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
 zplug "zsh-users/zsh-autosuggestions"
 
