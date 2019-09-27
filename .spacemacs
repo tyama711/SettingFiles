@@ -33,7 +33,10 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(php
+   '((yaml :variables
+          yaml-indent-offset 4)
+     ruby
+     php
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -69,7 +72,10 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages
+   '(evil-vimish-fold
+     vimish-fold
+     )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -476,6 +482,8 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
+  (setq-default evil-escape-delay 0.15)
+
   ;; if the first 30 line of the opened file is too long, enable fundamental by default
   (defun get-nth-line-length (n)
     "Length of the Nth line."
@@ -498,9 +506,12 @@ before packages are loaded."
 
   ;; keybind
   (spacemacs/declare-prefix "ps" "search project")
-  (spacemacs/set-leader-keys "ps" 'spacemacs/helm-project-smart-do-search)
+  (spacemacs/set-leader-keys "ps" #'spacemacs/helm-project-smart-do-search)
   (spacemacs/declare-prefix "pS" "search project w/input")
-  (spacemacs/set-leader-keys "pS" 'spacemacs/helm-project-smart-do-search-region-or-symbol)
+  (spacemacs/set-leader-keys "pS" #'spacemacs/helm-project-smart-do-search-region-or-symbol)
+
+  ;; helm-ag persistent action(TAB)でファイルプレビュー
+  (custom-set-variables '(helm-ag-use-temp-buffer t))
 
   ;; (spacemacs/set-leader-keys-for-major-mode 'typescript-mode "gd" 'tide-jump-to-definition)
   ;; ;; bind query-replace-regexp to M-%
@@ -519,17 +530,17 @@ before packages are loaded."
   ;; etc
 
   ;; centering matching lines by evil-ex-search
-  (advice-add 'evil-ex-search-next :after
+  (advice-add #'evil-ex-search-next :after
               (lambda (&rest x) (evil-scroll-line-to-center (line-number-at-pos))))
-  (advice-add 'evil-ex-search-previous :after
+  (advice-add #'evil-ex-search-previous :after
               (lambda (&rest x) (evil-scroll-line-to-center (line-number-at-pos))))
 
  ;; resize windows automatically
   (golden-ratio-mode 1)
 
   ;; activate mouse wheel
-  (global-set-key [mouse-4] 'scroll-down-line)
-  (global-set-key [mouse-5] 'scroll-up-line)
+  (global-set-key [mouse-4] #'scroll-down-line)
+  (global-set-key [mouse-5] #'scroll-up-line)
 
   ;; powerline configuration
   (setq powerline-image-apple-rgb t)
@@ -540,6 +551,11 @@ before packages are loaded."
 
   ;; avy configuration
   (custom-set-variables '(avy-style 'pre))
+
+  ;; counsel-M-x の初期文字列を空にする
+  (with-eval-after-load 'ivy
+    (setq ivy-initial-inputs-alist nil)
+  )
 
   ;; タブと全角スペースを描画する
   ;; see whitespace.el for more details
@@ -584,8 +600,8 @@ before packages are loaded."
       (process-send-eof proc)))
 
   (if (eq system-type 'darwin)
-      (setq interprogram-cut-function 'paste-to-osx
-            interprogram-paste-function 'copy-from-osx))
+      (setq interprogram-cut-function #'paste-to-osx
+            interprogram-paste-function #'copy-from-osx))
 
   ;; sql mode configuration
   (add-to-list 'auto-mode-alist '("\\.hql\\'" . sql-mode))
