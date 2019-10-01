@@ -40,6 +40,9 @@ zplug "mrowa44/emojify", as:command, use:emojify
 
 zplug "rupa/z", use:z.sh
 
+zplug "andrewferrier/fzf-z", as:command, use:fzfz, \
+      hook-load:"source $ZPLUG_REPOS/andrewferrier/fzf-z/fzf-z.plugin.zsh"
+
 zplug "b4b4r07/emoji-cli"
 
 zplug "mollifier/anyframe"
