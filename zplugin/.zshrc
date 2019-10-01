@@ -106,6 +106,7 @@ zplugin ice as"program" \
         atclone"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64" \
         atpull"%atclone" atload"[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh" pick"bin/fzf"
 zplugin light junegunn/fzf
+FZF_DEFAULT_OPTS="--exact --preview 'head -100 {}'"
 
 zplugin ice from"gh-r" as"program" atload'eval "$(hub alias -s)"' pick"hub*/bin/hub"
 zplugin light github/hub
@@ -116,6 +117,9 @@ zplugin light BurntSushi/ripgrep
 zplugin ice from"gh-r" as"program" mv"jq* -> jq" pick"jq"
 zplugin light stedolan/jq
 
+zplugin ice as"program" id-as"fzf-z_program" pick"fzfz"
+zplugin light andrewferrier/fzf-z
+
 ## completion section
 zplugin ice wait from"gh-r" as"completion" id-as"hub_completion" \
         mv"hub*/etc/hub.zsh_completion -> _hub" pick"_hub"
@@ -124,6 +128,9 @@ zplugin light github/hub
 ## plugin section
 zplugin ice wait
 zplugin light agkozak/zsh-z
+
+zplugin ice wait
+zplugin light andrewferrier/fzf-z
 
 zplugin ice wait
 zplugin light mollifier/anyframe
