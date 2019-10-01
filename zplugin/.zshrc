@@ -122,6 +122,12 @@ zplugin ice wait from"gh-r" as"completion" id-as"hub_completion" \
 zplugin light github/hub
 
 ## plugin section
+zplugin ice wait
+zplugin light agkozak/zsh-z
+
+zplugin ice wait
+zplugin light mollifier/anyframe
+
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
 
@@ -142,9 +148,6 @@ bindkey '^x^e' anyframe-widget-insert-git-branch
 zstyle ":anyframe:selector:" use fzf
 # specify path and options for peco, percol, or fzf
 zstyle ":anyframe:selector:fzf:" command 'fzf --extended'
-
-zplugin ice wait
-zplugin light mollifier/anyframe
 
 zplugin ice wait
 zplugin light zsh-users/zsh-completions
