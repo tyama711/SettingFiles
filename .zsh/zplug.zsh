@@ -38,7 +38,7 @@ zplug "arks22/tmuximum", as:command
 
 zplug "mrowa44/emojify", as:command, use:emojify
 
-zplug "rupa/z", use:z.sh
+zplug "agkozak/zsh-z"
 
 zplug "andrewferrier/fzf-z", as:command, use:fzfz, \
       hook-load:"source $ZPLUG_REPOS/andrewferrier/fzf-z/fzf-z.plugin.zsh"
