@@ -38,7 +38,7 @@ zplug "arks22/tmuximum", as:command
 
 zplug "mrowa44/emojify", as:command, use:emojify
 
-zplug "rupa/z"
+zplug "rupa/z", use:z.sh
 
 zplug "b4b4r07/emoji-cli"
 
