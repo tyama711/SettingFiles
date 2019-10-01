@@ -218,7 +218,8 @@ if [[ -f ~/.zplug/init.zsh ]]; then
     #################################
     # post load configuration
     #################################
-    eval $(hub alias -s)
+    eval "$(hub alias -s)"
+    eval "$(fasd --init auto)"
 fi
 
 if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z "${TMUX}" ]]; then
