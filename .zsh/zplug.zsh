@@ -36,9 +36,9 @@ zplug "stedolan/jq", \
 
 zplug "arks22/tmuximum", as:command
 
-zplug "clvv/fasd", as:command, use:fasd
-
 zplug "mrowa44/emojify", as:command, use:emojify
+
+zplug "rupa/z"
 
 zplug "b4b4r07/emoji-cli"
 
