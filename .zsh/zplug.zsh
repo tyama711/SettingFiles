@@ -15,7 +15,7 @@ zplug "junegunn/fzf", \
       rename-to:"fzf", \
       hook-build:"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64", \
       hook-load:"[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh"
-FZF_DEFAULT_OPTS="--exact"
+FZF_DEFAULT_OPTS="--exact --preview 'head -100 {}'"
 
 zplug "github/hub", \
       from:gh-r, \

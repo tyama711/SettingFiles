@@ -44,13 +44,11 @@ esac
 alias la="ls -a"
 alias lf="ls -F"
 alias ll="ls -l"
-
 alias du="du -h"
 alias df="df -h"
-
 alias su="su -l"
-
 alias less='less -R'
+alias gs="git status"
 
 ## デフォルトで emacsclient を使用する
 has emacsclient && alias e='emacsclient -nw -a ""'
