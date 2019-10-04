@@ -23,17 +23,7 @@ has() {
     type "${1:?too few arguments}" &>/dev/null
 }
 
-# ... -> ../../, .... -> ../../../ and so on.
-rationalise-dot() {
-    if [[ $LBUFFER = *.. ]]; then
-        LBUFFER+=/..
-    else
-        LBUFFER+=.
-    fi
-
-}
-zle -N rationalise-dot
-bindkey . rationalise-dot
+autoload -Uz compinit && compinit
 
 autoload history-search-end
 zle -N history-beginning-search-backward-end history-search-end
@@ -81,14 +71,9 @@ setopt share_history        # share command history data
 
 # Disable terminal shortcut keys
 if [[ -t 0 ]]; then
-    # Disable Ctrl+D
-    stty eof undef
-
-    # Disable Ctrl+S
-    stty stop undef
-
-    # Disable Ctrl+Q
-    stty start undef
+    stty eof undef   # Disable Ctrl+D
+    stty stop undef  # Disable Ctrl+S
+    stty start undef # Disable Ctrl+Q
 fi
 
 ### Zplugin configuration
@@ -104,11 +89,13 @@ zplugin light motemen/ghq
 
 zplugin ice as"program" \
         atclone"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64" \
-        atpull"%atclone" atload"[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh" pick"bin/fzf"
+        atpull"%atclone" \
+        atload"[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh" pick"bin/fzf"
 zplugin light junegunn/fzf
 FZF_DEFAULT_OPTS="--exact --preview 'head -100 {}'"
 
-zplugin ice from"gh-r" as"program" atload'eval "$(hub alias -s)"' pick"hub*/bin/hub"
+zplugin ice from"gh-r" as"program" atload'eval "$(hub alias -s)"' \
+        pick"hub*/bin/hub"
 zplugin light github/hub
 
 zplugin ice from"gh-r" as"program" pick"ripgrep*/rg"
@@ -117,20 +104,66 @@ zplugin light BurntSushi/ripgrep
 zplugin ice from"gh-r" as"program" mv"jq* -> jq" pick"jq"
 zplugin light stedolan/jq
 
-zplugin ice as"program" id-as"fzf-z_program" pick"fzfz"
-zplugin light andrewferrier/fzf-z
+zplugin ice from"gh-r" as"program" pick"fd*/fd"
+zplugin light sharkdp/fd
+
+zplugin ice from"gh-r" as"program" mv"exa*->exa" pick"exa"
+zplugin light ogham/exa
+
+zplugin ice from"gh-r" as"program" pick"bat*/bat"
+zplugin light sharkdp/bat
+
+zplugin ice as"program" pick"tldr"
+zplugin light raylee/tldr
+
+zplugin ice as"program" from"gh-r" bpick"*.tar.gz" pick"pet"
+zplugin light knqyf263/pet
+
+zplugin ice as"program" pick"bin/anyenv" atclone"bin/anyenv init" \
+        atpull"%atclone" atload'eval "$(anyenv init -)"'
+zplugin light anyenv/anyenv
+
+zplugin ice as"program" from"gh-r" mv"direnv*->direnv" pick"direnv"
+zplugin light direnv/direnv
+eval "$(direnv hook zsh)"
+
+zplugin ice as"program" pick"third_party/build_fatpack/diff-so-fancy"
+zplugin light so-fancy/diff-so-fancy
+git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+git config --global color.ui true
+git config --global color.diff-highlight.oldNormal    "red bold"
+git config --global color.diff-highlight.oldHighlight "red bold 52"
+git config --global color.diff-highlight.newNormal    "green bold"
+git config --global color.diff-highlight.newHighlight "green bold 22"
+git config --global color.diff.meta       "11"
+git config --global color.diff.frag       "magenta bold"
+git config --global color.diff.commit     "yellow bold"
+git config --global color.diff.old        "red bold"
+git config --global color.diff.new        "green bold"
+git config --global color.diff.whitespace "red reverse"
+
+zplugin ice as"program" atclone"./autogen.sh && ./configure && make" \
+        atpull"%atclone" pick"htop"
+zplugin light hishamhm/htop
 
 ## completion section
 zplugin ice wait from"gh-r" as"completion" id-as"hub_completion" \
         mv"hub*/etc/hub.zsh_completion -> _hub" pick"_hub"
 zplugin light github/hub
 
+zplugin ice wait as"completion" id-as"exa_completion" \
+        mv"contrib/completions.zsh->_exa" pick"_exa"
+zplugin light ogham/exa
+
 ## plugin section
-zplugin ice wait
-zplugin light agkozak/zsh-z
+zplugin ice wait atload"source up.sh"
+zplugin light shannonmoeller/up
 
 zplugin ice wait
-zplugin light andrewferrier/fzf-z
+zplugin light rupa/z
+
+zplugin ice wait
+zplugin light changyuheng/fz
 
 zplugin ice wait
 zplugin light mollifier/anyframe
@@ -156,7 +189,7 @@ zstyle ":anyframe:selector:" use fzf
 # specify path and options for peco, percol, or fzf
 zstyle ":anyframe:selector:fzf:" command 'fzf --extended'
 
-zplugin ice wait
+# zplugin ice wait
 zplugin light zsh-users/zsh-completions
 
 zplugin light romkatv/powerlevel10k
@@ -171,10 +204,10 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
 zplugin ice wait atload'_zsh_autosuggest_start'
 zplugin light zsh-users/zsh-autosuggestions
 
-zplugin ice wait atinit"zpcompinit"
+zplugin ice wait"1" atinit"zpcompinit"
 zplugin light zsh-users/zsh-syntax-highlighting
 
-zplugin ice wait \
+zplugin ice wait"2" \
         atload'bindkey "^[p" history-substring-search-up' \
         atload'bindkey "^[n" history-substring-search-down'
 zplugin light zsh-users/zsh-history-substring-search
