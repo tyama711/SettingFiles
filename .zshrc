@@ -2,16 +2,6 @@ has() {
     type "${1:?too few arguments}" &>/dev/null
 }
 
-rationalise-dot() {
-    if [[ $LBUFFER = *.. ]]; then
-        LBUFFER+=/..
-    else
-        LBUFFER+=.
-    fi
-}
-zle -N rationalise-dot
-bindkey . rationalise-dot
-
 autoload -Uz is-at-least
 
 

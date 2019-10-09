@@ -37,13 +37,32 @@ zplug "stedolan/jq", \
 zplug "arks22/tmuximum", as:command
 
 zplug "mrowa44/emojify", as:command, use:emojify
-
-zplug "agkozak/zsh-z"
-
-zplug "andrewferrier/fzf-z", as:command, use:fzfz, \
-      hook-load:"source $ZPLUG_REPOS/andrewferrier/fzf-z/fzf-z.plugin.zsh"
-
 zplug "b4b4r07/emoji-cli"
+
+zplug "rupa/z", as:command
+zplug "changyuheng/fz", defer:1
+
+zplug "shannonmoeller/up", use:"up.sh"
+zplug "ogham/exa", as:command, from:"gh-r", rename-to:exa
+zplug "sharkdp/bat", as:command, from:"gh-r", use:"*x86_64*linux*musl*"
+zplug "sharkdp/fd", as:command, from:"gh-r", use:"*x86_64*linux*musl*"
+zplug "raylee/tldr", as:command
+zplug "knqyf263/pet", as:command, from:"gh-r", use:"*linux*amd64*tar.gz"
+
+zplug "so-fancy/diff-so-fancy", as:command, \
+      use:"third_party/build_fatpack/diff-so-fancy", rename-to:diff-so-fancy
+git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+git config --global color.ui true
+git config --global color.diff-highlight.oldNormal    "red bold"
+git config --global color.diff-highlight.oldHighlight "red bold 52"
+git config --global color.diff-highlight.newNormal    "green bold"
+git config --global color.diff-highlight.newHighlight "green bold 22"
+git config --global color.diff.meta       "11"
+git config --global color.diff.frag       "magenta bold"
+git config --global color.diff.commit     "yellow bold"
+git config --global color.diff.old        "red bold"
+git config --global color.diff.new        "green bold"
+git config --global color.diff.whitespace "red reverse"
 
 zplug "mollifier/anyframe"
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
