@@ -33,9 +33,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '((yaml :variables
-          yaml-indent-offset 4)
-     ruby
+   '(yaml
+     python
      php
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -46,8 +45,9 @@ This function should only modify configuration layer settings."
      ;; better-defaults
      emacs-lisp
      git
-     (helm :variables
-          helm-ag-use-temp-buffer t)
+     (ivy :variables ivy-initial-inputs-alist nil)
+     ;; (helm :variables
+     ;;      helm-ag-use-temp-buffer t)
      markdown
      multiple-cursors
      org
@@ -58,11 +58,22 @@ This function should only modify configuration layer settings."
      syntax-checking
      treemacs
      ;; version-control
-     typescript
-     javascript
+     (typescript :variables
+                 web-mode-code-indent-offset 2
+                 web-mode-sql-indent-offset 2
+                 web-mode-css-indent-offset 2
+                 web-mode-attr-indent-offset 2
+                 web-mode-attr-value-indent-offset 2
+                 web-mode-markup-indent-offset 2
+                 web-mode-enable-auto-closing t
+                 typescript-indent-level 2)
+     (javascript :variables js-indent-level 2)
+     prettier
      (sql :variables sql-capitalize-keywords t)
      csv
      japanese
+     (html :variables
+           css-indent-offset 2)
      )
 
    ;; List of additional packages that will be installed without being
@@ -72,10 +83,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages
-   '(evil-vimish-fold
-     vimish-fold
-     )
+   dotspacemacs-additional-packages '()
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -221,7 +229,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Default font or prioritized list of fonts.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 13.0
+                               :size 12.0
                                :weight normal
                                :width normal)
 
@@ -505,18 +513,21 @@ before packages are loaded."
   (add-to-list 'magic-mode-alist (cons #'+my/check-minified-file 'fundamental-mode))
 
   ;; keybind
-  (spacemacs/declare-prefix "ps" "search project")
-  (spacemacs/set-leader-keys "ps" #'spacemacs/helm-project-smart-do-search)
-  (spacemacs/declare-prefix "pS" "search project w/input")
-  (spacemacs/set-leader-keys "pS" #'spacemacs/helm-project-smart-do-search-region-or-symbol)
+  (with-eval-after-load 'helm
+    (spacemacs/declare-prefix "ps" "search project")
+    (spacemacs/set-leader-keys "ps" #'spacemacs/helm-project-smart-do-search)
+    (spacemacs/declare-prefix "pS" "search project w/input")
+    (spacemacs/set-leader-keys "pS" #'spacemacs/helm-project-smart-do-search-region-or-symbol))
+  (with-eval-after-load 'ivy
+    (spacemacs/declare-prefix "ps" "search project")
+    (spacemacs/set-leader-keys "ps" #'spacemacs/search-project-auto)
+    (spacemacs/declare-prefix "pS" "search project w/input")
+    (spacemacs/set-leader-keys "pS" #'spacemacs/search-project-auto-region-or-symbol))
 
-  ;; helm-ag persistent action(TAB)でファイルプレビュー
-  (custom-set-variables '(helm-ag-use-temp-buffer t))
-
-  ;; (spacemacs/set-leader-keys-for-major-mode 'typescript-mode "gd" 'tide-jump-to-definition)
-  ;; ;; bind query-replace-regexp to M-%
-  ;; (global-set-key (kbd "M-%") 'anzu-query-replace-regexp)
-  ;; (global-set-key (kbd "C-s") 'isearch-forward-regexp)
+  (add-hook 'typescript-tsx-mode-hook
+            #'prettier-js-mode)
+  (add-hook 'typescript-mode-hook
+            #'prettier-js-mode)
 
   ;; daemon mode 場合に mode line が見辛い
   ;; https://github.com/syl20bnr/spacemacs/issues/10916
@@ -542,20 +553,15 @@ before packages are loaded."
   (global-set-key [mouse-4] #'scroll-down-line)
   (global-set-key [mouse-5] #'scroll-up-line)
 
-  ;; powerline configuration
-  (setq powerline-image-apple-rgb t)
-  (setq powerline-default-separator 'nil)
+  ;; ;; powerline configuration
+  ;; (setq powerline-image-apple-rgb t)
+  ;; (setq powerline-default-separator 'nil)
 
   ;; C-h を Backspace へ変換する。Help は<F1>で使える
   (define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))
 
   ;; avy configuration
   (custom-set-variables '(avy-style 'pre))
-
-  ;; counsel-M-x の初期文字列を空にする
-  (with-eval-after-load 'ivy
-    (setq ivy-initial-inputs-alist nil)
-  )
 
   ;; タブと全角スペースを描画する
   ;; see whitespace.el for more details
@@ -631,9 +637,12 @@ before packages are loaded."
                       my-sql-indentation-offsets-alist))))
 
   ;; japanese layer configuration ;;;;;;;;;;;;;;
-  ;; use helm with migemo
-  (with-eval-after-load "helm"
-    (helm-migemo-mode 1))
+  (with-eval-after-load "migemo"
+    (setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict")
+    ;; use helm with migemo
+    (with-eval-after-load "helm"
+      (helm-migemo-mode 1))
+    )
 
   ;; 半角と全角の間にスペースを表示
   (global-pangu-spacing-mode 1)
@@ -650,3 +659,24 @@ before packages are loaded."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(avy-style (quote pre))
+ '(package-selected-packages
+   (quote
+    (yaml-mode wgrep smex ivy-yasnippet ivy-xref ivy-purpose ivy-hydra counsel-projectile counsel-gtags counsel swiper ivy company-anaconda blacken anaconda-mode pythonic yasnippet-snippets ws-butler writeroom-mode winum which-key web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package treemacs-projectile treemacs-evil toc-org tide symon symbol-overlay string-inflection sqlup-mode sql-indent spaceline-all-the-icons smeargle restart-emacs rainbow-delimiters prettier-js popwin phpunit phpcbf php-extras php-auto-yasnippets persp-mode pcre2el password-generator paradox pangu-spacing overseer orgit org-projectile org-present org-pomodoro org-mime org-download org-cliplink org-bullets org-brain open-junk-file nodejs-repl nameless move-text mmm-mode markdown-toc magit-svn magit-gitflow macrostep lorem-ipsum livid-mode link-hint json-navigator json-mode js2-refactor js-doc japanese-holidays indent-guide hybrid-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-gitignore helm-git-grep helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy font-lock+ flycheck-pos-tip flycheck-package flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor-ja evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu eval-sexp-fu elisp-slime-nav editorconfig dumb-jump drupal-mode dotenv-mode doom-modeline diminish devdocs define-word ddskk csv-mode company-tern company-statistics company-php column-enforce-mode clean-aindent-mode centered-cursor-mode avy-migemo auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)
