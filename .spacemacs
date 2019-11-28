@@ -33,8 +33,10 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(yaml
-     python
+   '(perl5
+     (yaml :variables
+          yaml-indent-offset 4)
+     ruby
      php
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
