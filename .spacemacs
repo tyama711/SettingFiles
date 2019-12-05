@@ -588,31 +588,32 @@ before packages are loaded."
   (set-face-bold-p 'whitespace-space t)
 
   (if (eq system-type 'darwin)
-    ;; powerline configuration
-    (setq powerline-image-apple-rgb t)
-    (setq powerline-default-separator 'nil)
+    (progn
+      ;; powerline configuration
+      (setq powerline-image-apple-rgb t)
+      (setq powerline-default-separator 'nil)
 
-    ;; https://stackoverflow.com/questions/13517910/yank-does-not-paste-text-when-using-emacs-over-ssh
-    ;; handle copy/paste intelligently
-    (defun copy-from-osx ()
-      "Handle copy/paste intelligently on osx."
-      (let ((pbpaste (purecopy "/usr/bin/pbpaste")))
-        (if (file-exists-p pbpaste)
-          (let ((tramp-mode nil)
-                (default-directory "~"))
-            (shell-command-to-string pbpaste)))))
+      ;; https://stackoverflow.com/questions/13517910/yank-does-not-paste-text-when-using-emacs-over-ssh
+      ;; handle copy/paste intelligently
+      (defun copy-from-osx ()
+        "Handle copy/paste intelligently on osx."
+        (let ((pbpaste (purecopy "/usr/bin/pbpaste")))
+          (if (file-exists-p pbpaste)
+              (let ((tramp-mode nil)
+                    (default-directory "~"))
+                (shell-command-to-string pbpaste)))))
 
-    (defun paste-to-osx (text &optional push)
-      "Handle copy/paste intelligently on osx.
+      (defun paste-to-osx (text &optional push)
+        "Handle copy/paste intelligently on osx.
        TEXT gets put into the Macosx clipboard.
        The PUSH argument is ignored."
-      (let* ((process-connection-type nil)
-             (proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-        (process-send-string proc text)
-        (process-send-eof proc)))
+        (let* ((process-connection-type nil)
+               (proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+          (process-send-string proc text)
+          (process-send-eof proc)))
 
-    (setq interprogram-cut-function #'paste-to-osx
-          interprogram-paste-function #'copy-from-osx))
+      (setq interprogram-cut-function #'paste-to-osx
+            interprogram-paste-function #'copy-from-osx)))
 
   ;; sql mode configuration
   (add-to-list 'auto-mode-alist '("\\.hql\\'" . sql-mode))
