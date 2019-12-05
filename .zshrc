@@ -1,7 +1,7 @@
-# zmodload zsh/zprof && zprof
-if [ -z ${TMUX} ]; then
-    tmux && exit 0
-fi
+# # zmodload zsh/zprof && zprof
+# if [ -z ${TMUX} ]; then
+#     tmux && exit 0
+# fi
 
 ## Tmux auto logging
 if [[ ! -z "$TMUX" ]]; then
@@ -32,17 +32,31 @@ zle -N history-beginning-search-forward-end history-search-end
 bindkey "^p" history-beginning-search-backward-end
 bindkey "^n" history-beginning-search-forward-end
 
-alias la="ls -a"
-alias lf="ls -F"
-alias ll="ls -l"
+# Macの場合はgsedを使用する
+if [ $(uname) = Darwin ]; then
+    alias sed=gsed
+    alias ls=gls
+    alias dircolors=gdircolors
+    alias la="gls -a"
+    alias lf="gls -F"
+    alias ll="gls -l"
+    alias ls="gls --color"
+else
+    alias la="ls -a"
+    alias lf="ls -F"
+    alias ll="ls -l"
+    alias ls="ls --color"
+fi
+
 alias du="du -h"
 alias df="df -h"
 alias su="su -l"
 alias less='less -r'
-alias ls="ls --color"
 
-# Macの場合はgsedを使用する
-[ $(uname) = Darwin ] && has gsed && alias sed='gsed'
+alias g='git'
+alias gs='git status'
+alias gco='git checkout'
+compdef g=git
 
 # デフォルトでemacsclientを使用する
 has emacsclient && alias e='emacsclient -nw -a ""'
@@ -79,10 +93,13 @@ fi
 
 ### Zplugin configuration
 ### Added by Zplugin's installer
-source '/home/tyama711/.zplugin/bin/zplugin.zsh'
+source "${HOME}/.zplugin/bin/zplugin.zsh"
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
 ### End of Zplugin installer's chunk
+
+mkdir -p ${HOME}/.zplugin/man/man1
+export MANPATH=${HOME}/.zplugin/man:$MANPATH
 
 ## program section
 zplugin ice from"gh-r" as"program" pick"ghq*/ghq"
@@ -102,18 +119,24 @@ zplugin light github/hub
 
 zplugin ice from"gh-r" as"program" pick"ripgrep*/rg"
 zplugin light BurntSushi/ripgrep
+cp ${HOME}/.zplugin/plugins/BurntSushi---ripgrep/ripgrep-11.0.2-x86_64-apple-darwin/doc/rg.1 \
+   ${HOME}/.zplugin/man/man1
 
 zplugin ice from"gh-r" as"program" mv"jq* -> jq" pick"jq"
 zplugin light stedolan/jq
 
 zplugin ice from"gh-r" as"program" pick"fd*/fd"
 zplugin light sharkdp/fd
+cp ${HOME}/.zplugin/plugins/sharkdp---fd/fd-v7.4.0-x86_64-apple-darwin/fd.1 \
+   ${HOME}/.zplugin/man/man1
 
 zplugin ice from"gh-r" as"program" mv"exa*->exa" pick"exa"
 zplugin light ogham/exa
 
 zplugin ice from"gh-r" as"program" pick"bat*/bat"
 zplugin light sharkdp/bat
+cp ${HOME}/.zplugin/plugins/sharkdp---bat/bat-v0.12.1-x86_64-apple-darwin/bat.1 \
+   ${HOME}/.zplugin/man/man1
 
 zplugin ice as"program" pick"tldr"
 zplugin light raylee/tldr
@@ -147,6 +170,8 @@ git config --global color.diff.whitespace "red reverse"
 zplugin ice as"program" atclone"./autogen.sh && ./configure && make" \
         atpull"%atclone" pick"htop"
 zplugin light hishamhm/htop
+cp ${HOME}/.zplugin/plugins/hishamhm---htop/htop.1.in \
+   ${HOME}/.zplugin/man/man1
 
 ## completion section
 zplugin ice wait from"gh-r" as"completion" id-as"hub_completion" \
@@ -156,6 +181,7 @@ zplugin light github/hub
 zplugin ice wait as"completion" id-as"exa_completion" \
         mv"contrib/completions.zsh->_exa" pick"_exa"
 zplugin light ogham/exa
+cp ${HOME}/.zplugin/plugins/exa_completion/contrib/man/exa.1 ${HOME}/.zplugin/man/man1
 
 ## plugin section
 zplugin ice wait atload"source up.sh"
@@ -163,6 +189,8 @@ zplugin light shannonmoeller/up
 
 zplugin ice wait
 zplugin light rupa/z
+cp ${HOME}/.zplugin/plugins/rupa---z/z.1 \
+   ${HOME}/.zplugin/man/man1
 
 zplugin ice wait
 zplugin light changyuheng/fz
