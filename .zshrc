@@ -91,8 +91,9 @@ if [[ -t 0 ]]; then
     stty start undef # Disable Ctrl+Q
 fi
 
-### Zplugin configuration
-### Added by Zplugin's installer
+#####################################################
+### Zplugin configuration ###########################
+#####################################################
 source "${HOME}/.zplugin/bin/zplugin.zsh"
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
@@ -101,7 +102,8 @@ autoload -Uz _zplugin
 mkdir -p ${HOME}/.zplugin/man/man1
 export MANPATH=${HOME}/.zplugin/man:$MANPATH
 
-## program section
+
+## program section ##################################
 zplugin ice from"gh-r" as"program" pick"ghq*/ghq"
 zplugin light motemen/ghq
 
@@ -173,7 +175,10 @@ zplugin light hishamhm/htop
 cp ${HOME}/.zplugin/plugins/hishamhm---htop/htop.1.in \
    ${HOME}/.zplugin/man/man1
 
-## completion section
+zplugin ice as"program"
+zplugin light arks22/tmuximum
+
+## completion section ################################
 zplugin ice wait from"gh-r" as"completion" id-as"hub_completion" \
         mv"hub*/etc/hub.zsh_completion -> _hub" pick"_hub"
 zplugin light github/hub
@@ -183,7 +188,8 @@ zplugin ice wait as"completion" id-as"exa_completion" \
 zplugin light ogham/exa
 cp ${HOME}/.zplugin/plugins/exa_completion/contrib/man/exa.1 ${HOME}/.zplugin/man/man1
 
-## plugin section
+
+## plugin section ####################################
 zplugin ice wait atload"source up.sh"
 zplugin light shannonmoeller/up
 
@@ -241,7 +247,10 @@ zplugin ice wait"2" \
         atload'bindkey "^[p" history-substring-search-up' \
         atload'bindkey "^[n" history-substring-search-down'
 zplugin light zsh-users/zsh-history-substring-search
-### End of Zplugin configuration
+
+######################################################
+### End of Zplugin configuration #####################
+######################################################
 
 [[ -f ${HOME}/.zshrc.local ]] && source ${HOME}/.zshrc.local
 
