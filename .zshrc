@@ -1,7 +1,4 @@
 # # zmodload zsh/zprof && zprof
-# if [ -z ${TMUX} ]; then
-#     tmux && exit 0
-# fi
 
 ## Tmux auto logging
 if [[ ! -z "$TMUX" ]]; then
@@ -121,7 +118,7 @@ zplugin light github/hub
 
 zplugin ice from"gh-r" as"program" pick"ripgrep*/rg"
 zplugin light BurntSushi/ripgrep
-cp ${HOME}/.zplugin/plugins/BurntSushi---ripgrep/ripgrep-11.0.2-x86_64-apple-darwin/doc/rg.1 \
+cp ${HOME}/.zplugin/plugins/BurntSushi---ripgrep/ripgrep-*/doc/rg.1 \
    ${HOME}/.zplugin/man/man1
 
 zplugin ice from"gh-r" as"program" mv"jq* -> jq" pick"jq"
@@ -129,7 +126,7 @@ zplugin light stedolan/jq
 
 zplugin ice from"gh-r" as"program" pick"fd*/fd"
 zplugin light sharkdp/fd
-cp ${HOME}/.zplugin/plugins/sharkdp---fd/fd-v7.4.0-x86_64-apple-darwin/fd.1 \
+cp ${HOME}/.zplugin/plugins/sharkdp---fd/fd-*/fd.1 \
    ${HOME}/.zplugin/man/man1
 
 zplugin ice from"gh-r" as"program" mv"exa*->exa" pick"exa"
@@ -137,7 +134,7 @@ zplugin light ogham/exa
 
 zplugin ice from"gh-r" as"program" pick"bat*/bat"
 zplugin light sharkdp/bat
-cp ${HOME}/.zplugin/plugins/sharkdp---bat/bat-v0.12.1-x86_64-apple-darwin/bat.1 \
+cp ${HOME}/.zplugin/plugins/sharkdp---bat/bat-*/bat.1 \
    ${HOME}/.zplugin/man/man1
 
 zplugin ice as"program" pick"tldr"
@@ -147,7 +144,7 @@ zplugin ice as"program" from"gh-r" bpick"*.tar.gz" pick"pet"
 zplugin light knqyf263/pet
 
 zplugin ice as"program" pick"bin/anyenv" atclone"bin/anyenv init" \
-        atpull"%atclone" atload'eval "$(anyenv init -)"'
+        atpull"%atclone" atload'[[ -d /home/takuyaya/.config/anyenv/anyenv-install ]] || anyenv install --force-init'
 zplugin light anyenv/anyenv
 
 zplugin ice as"program" from"gh-r" mv"direnv*->direnv" pick"direnv"
@@ -184,19 +181,21 @@ zplugin ice wait from"gh-r" as"completion" id-as"hub_completion" \
 zplugin light github/hub
 
 zplugin ice wait as"completion" id-as"exa_completion" \
-        mv"contrib/completions.zsh->_exa" pick"_exa"
+        mv"contrib/completions.zsh->_exa" pick"_exa" \
+        atclone"cp ${HOME}/.zplugin/plugins/exa_completion/contrib/man/exa.1 ${HOME}/.zplugin/man/man1" \
+        atpull"%atclone"
 zplugin light ogham/exa
-cp ${HOME}/.zplugin/plugins/exa_completion/contrib/man/exa.1 ${HOME}/.zplugin/man/man1
+
 
 
 ## plugin section ####################################
 zplugin ice wait atload"source up.sh"
 zplugin light shannonmoeller/up
 
-zplugin ice wait
+zplugin ice wait \
+        atclone"cp ${HOME}/.zplugin/plugins/rupa---z/z.1 ${HOME}/.zplugin/man/man1" \
+        atpull"%atclone"
 zplugin light rupa/z
-cp ${HOME}/.zplugin/plugins/rupa---z/z.1 \
-   ${HOME}/.zplugin/man/man1
 
 zplugin ice wait
 zplugin light changyuheng/fz
@@ -253,6 +252,10 @@ zplugin light zsh-users/zsh-history-substring-search
 ######################################################
 
 [[ -f ${HOME}/.zshrc.local ]] && source ${HOME}/.zshrc.local
+
+if [[ -z ${TMUX} ]]; then
+    has tmuximum && tmux && exit 0
+fi
 
 # if (which zprof > /dev/null) ;then
 #     zprof | less
