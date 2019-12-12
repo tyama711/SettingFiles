@@ -124,7 +124,7 @@ cp ${HOME}/.zplugin/plugins/BurntSushi---ripgrep/ripgrep-*/doc/rg.1 \
 zplugin ice from"gh-r" as"program" mv"jq* -> jq" pick"jq"
 zplugin light stedolan/jq
 
-zplugin ice from"gh-r" as"program" pick"fd*/fd"
+zplugin ice from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd"
 zplugin light sharkdp/fd
 cp ${HOME}/.zplugin/plugins/sharkdp---fd/fd-*/fd.1 \
    ${HOME}/.zplugin/man/man1
@@ -132,7 +132,7 @@ cp ${HOME}/.zplugin/plugins/sharkdp---fd/fd-*/fd.1 \
 zplugin ice from"gh-r" as"program" mv"exa*->exa" pick"exa"
 zplugin light ogham/exa
 
-zplugin ice from"gh-r" as"program" pick"bat*/bat"
+zplugin ice from"gh-r" bpick"bat-*-musl*" as"program" pick"bat*/bat"
 zplugin light sharkdp/bat
 cp ${HOME}/.zplugin/plugins/sharkdp---bat/bat-*/bat.1 \
    ${HOME}/.zplugin/man/man1
@@ -254,7 +254,7 @@ zplugin light zsh-users/zsh-history-substring-search
 [[ -f ${HOME}/.zshrc.local ]] && source ${HOME}/.zshrc.local
 
 if [[ -z ${TMUX} ]]; then
-    has tmuximum && tmux && exit 0
+    has tmuximum && tmuximum && exit 0
 fi
 
 # if (which zprof > /dev/null) ;then
