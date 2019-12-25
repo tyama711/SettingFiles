@@ -112,6 +112,11 @@ fi
 #####################################################
 ### Zplugin configuration ###########################
 #####################################################
+
+# zpluginによって設定されたPATHはあらかじめ消しておく。
+# これをしないと、tmuxを使った時にPATHの順序がおかしくなる。
+export PATH=$(echo -n $PATH | tr ':' '\n' | sed -e '/.zplugin/d' | tr '\n' ':')
+
 source "${HOME}/.zplugin/bin/zplugin.zsh"
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
@@ -164,8 +169,8 @@ zplugin light raylee/tldr
 zplugin ice as"program" from"gh-r" bpick"*.tar.gz" pick"pet"
 zplugin light knqyf263/pet
 
-zplugin ice as"program" pick"bin/anyenv" atclone"bin/anyenv init" \
-        atpull"%atclone" atload'[[ -d /home/takuyaya/.config/anyenv/anyenv-install ]] || anyenv install --force-init'
+zplugin ice as"program" pick"bin/anyenv" \
+        atload"eval \"\$(anyenv init -)\"; [[ -d ${HOME}/.config/anyenv/anyenv-install ]] || anyenv install --force-init"
 zplugin light anyenv/anyenv
 
 zplugin ice as"program" from"gh-r" mv"direnv*->direnv" pick"direnv"
@@ -274,7 +279,7 @@ zplugin light zsh-users/zsh-history-substring-search
 
 [[ -f ${HOME}/.zshrc.local ]] && source ${HOME}/.zshrc.local
 
-if [[ -z ${TMUX} ]]; then
+if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z ${TMUX} ]]; then
     has tmuximum && tmuximum && exit 0
 fi
 
