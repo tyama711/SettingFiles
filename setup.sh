@@ -26,14 +26,14 @@ sudo make install
 popd
 rm -rf zsh-zsh-5.7.1
 
-cp -b ~/dotfiles/.zshrc ~/
+ln -s -f dotfiles/.zshrc ~
 
 
 # Install Zplugin
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
 zsh -c "zplugin self-update"
 
-cp -b ~/dotfiles/.p10.zsh ~/
+cp -b dotfiles/.p10.zsh ~/
 
 
 # Build and install Emacs 26.3
@@ -75,15 +75,14 @@ pushd tmux-3.0a
 make
 sudo make install
 
+
 # Install Tmux Config
-ghq get https://github.com/samoshkin/tmux-config.git
+ghq get https://github.com/tyama711/tmux-config.git
 ghq look tmux-config
 ./tmux-config/install.sh
 
 popd
 rm -rf tmux-3.0a
-
-cp -b ~/dotfiles/.tmux.conf ~/
 
 
 # Install sshrc
