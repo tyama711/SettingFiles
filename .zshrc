@@ -5,6 +5,13 @@ if [[ -f /usr/local/bin/zsh && $(readlink /proc/$$/exe) != /usr/local/bin/zsh &&
     exit $?
 fi
 
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block, everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 has() {
     type "${1:?too few arguments}" &>/dev/null
 }
@@ -216,7 +223,6 @@ zplugin ice wait as"completion" id-as"exa_completion" \
 zplugin light ogham/exa
 
 
-
 ## plugin section ####################################
 zplugin ice wait atload"source up.sh"
 zplugin light shannonmoeller/up
@@ -256,9 +262,11 @@ zstyle ":anyframe:selector:fzf:" command 'fzf --extended'
 # zplugin ice wait
 zplugin light zsh-users/zsh-completions
 
+zplugin ice depth=1
 zplugin light romkatv/powerlevel10k
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
 
 zplugin ice wait atclone"dircolors -b dircolors.256dark > c.zsh" \
         atpull'%atclone' pick"c.zsh" nocompile'!'
