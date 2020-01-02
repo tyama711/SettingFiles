@@ -203,8 +203,6 @@ zplugin light hishamhm/htop
 cp ${HOME}/.zplugin/plugins/hishamhm---htop/htop.1.in \
    ${HOME}/.zplugin/man/man1
 
-zplugin ice as"program"
-zplugin light arks22/tmuximum
 
 ## completion section ################################
 zplugin ice wait from"gh-r" as"completion" id-as"hub_completion" \
@@ -283,7 +281,7 @@ zplugin light zsh-users/zsh-history-substring-search
 ######################################################
 
 if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z ${TMUX} ]]; then
-    has tmuximum && tmuximum && exit 0
+    has tmux && tmux && exit 0
 fi
 
 [[ -f ${HOME}/.zshrc.local ]] && source ${HOME}/.zshrc.local
