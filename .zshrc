@@ -289,7 +289,7 @@ zplugin light zsh-users/zsh-history-substring-search
 ######################################################
 
 if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z ${TMUX} ]]; then
-    has tmux && tmux && exit 0
+    has tmux && (tmux attach -t base || tmux new -t base) && exit 0
 fi
 
 [[ -f ${HOME}/.zshrc.local ]] && source ${HOME}/.zshrc.local
