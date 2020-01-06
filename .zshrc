@@ -5,16 +5,20 @@ if [[ -f /usr/local/bin/zsh && $(readlink /proc/$$/exe) != /usr/local/bin/zsh &&
     exit $?
 fi
 
+has() {
+    type "${1:?too few arguments}" &>/dev/null
+}
+
+if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z ${TMUX} ]]; then
+    has tmux && (tmux attach -t base || tmux new -t base) && exit 0
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block, everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-has() {
-    type "${1:?too few arguments}" &>/dev/null
-}
 
 ## Tmux auto logging
 if [[ ! -z "$TMUX" ]]; then
@@ -287,10 +291,6 @@ zplugin light zsh-users/zsh-history-substring-search
 ######################################################
 ### End of Zplugin configuration #####################
 ######################################################
-
-if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z ${TMUX} ]]; then
-    has tmux && (tmux attach -t base || tmux new -t base) && exit 0
-fi
 
 [[ -f ${HOME}/.zshrc.local ]] && source ${HOME}/.zshrc.local
 
