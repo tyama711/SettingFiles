@@ -34,8 +34,6 @@ zplug "stedolan/jq", \
       from:gh-r, \
       rename-to:jq
 
-zplug "arks22/tmuximum", as:command
-
 zplug "mrowa44/emojify", as:command, use:emojify
 zplug "b4b4r07/emoji-cli"
 
