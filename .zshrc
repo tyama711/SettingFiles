@@ -74,6 +74,7 @@ if [ $(uname) = Darwin ]; then
     alias lf="gls -F"
     alias ll="gls -l"
     alias ls="gls --color"
+    alias tar="gtar"
 else
     alias la="ls -a"
     alias lf="ls -F"
