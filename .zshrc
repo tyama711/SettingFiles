@@ -75,6 +75,9 @@ if [ $(uname) = Darwin ]; then
     alias ll="gls -l"
     alias ls="gls --color"
     alias tar="gtar"
+
+    export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+    export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 else
     alias la="ls -a"
     alias lf="ls -F"
