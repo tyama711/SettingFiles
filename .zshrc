@@ -96,6 +96,7 @@ alias gc='git checkout'
 alias gd='git diff'
 alias gp='git pull'
 alias gl='git log'
+alias gb='git branch'
 compdef g=git
 
 # デフォルトでemacsclientを使用する
