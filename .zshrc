@@ -92,7 +92,10 @@ alias less='less -r'
 
 alias g='git'
 alias gs='git status'
-alias gco='git checkout'
+alias gc='git checkout'
+alias gd='git diff'
+alias gp='git pull'
+alias gl='git log'
 compdef g=git
 
 # デフォルトでemacsclientを使用する
