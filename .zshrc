@@ -9,7 +9,7 @@ has() {
     type "${1:?too few arguments}" &>/dev/null
 }
 
-if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z ${TMUX} ]]; then
+if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z "${TMUX}" ]]; then
     has tmux && (tmux attach -t base || tmux new -t base) && exit 0
 fi
 
