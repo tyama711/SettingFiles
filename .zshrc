@@ -102,7 +102,8 @@ compdef g=git
 
 # デフォルトでemacsclientを使用する
 has emacsclient && alias e='emacsclient -nw -a ""'
-# alias e=emacs
+
+has prename && alias ren=prename
 
 # auto change directory
 setopt auto_cd
