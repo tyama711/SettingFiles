@@ -225,6 +225,9 @@ zplugin light hishamhm/htop
 cp ${HOME}/.zplugin/plugins/hishamhm---htop/htop.1.in \
    ${HOME}/.zplugin/man/man1
 
+zplugin ice as"program" from"gh-r" bpick"*-linux-musl.tar.gz" pick"loc"
+zplugin light cgag/loc
+
 
 ## completion section ################################
 zplugin ice wait from"gh-r" as"completion" id-as"hub_completion" \
