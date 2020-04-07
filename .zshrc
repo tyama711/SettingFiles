@@ -136,6 +136,10 @@ if [[ -t 0 ]]; then
     stty start undef # Disable Ctrl+Q
 fi
 
+export EDITOR=vi
+export KEYTIMEOUT=15
+bindkey -s "fd" $'\x1b'
+
 #####################################################
 ### Zplugin configuration ###########################
 #####################################################
