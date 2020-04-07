@@ -138,6 +138,7 @@ fi
 
 # export EDITOR=vi
 # export KEYTIMEOUT=15
+# bindkey -v
 # bindkey -s "fd" $'\x1b'
 
 #####################################################
