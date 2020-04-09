@@ -168,7 +168,7 @@ zplugin ice as"program" \
         atload"[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh" \
         pick"bin/fzf"
 zplugin light junegunn/fzf
-FZF_DEFAULT_OPTS="--exact --height 20 --bind 'ctrl-k:kill-line' --preview 'echo {}' --preview-window down:3:wrap"
+export FZF_DEFAULT_OPTS="--exact --height 20 --bind 'ctrl-k:kill-line' --preview 'echo {}' --preview-window down:3:wrap"
 
 zplugin ice from"gh-r" as"program" atload'eval "$(hub*/bin/hub alias -s)"' \
         pick"hub*/bin/hub"
@@ -182,8 +182,13 @@ cp ${HOME}/.zplugin/plugins/BurntSushi---ripgrep/ripgrep-*/doc/rg.1 \
 zplugin ice from"gh-r" as"program" mv"jq* -> jq" pick"jq"
 zplugin light stedolan/jq
 
-zplugin ice from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd"
-zplugin light sharkdp/fd
+if [ $(uname) = Darwin ]; then
+    zplugin ice from"gh-r" bpick"fd-*-darwin*" as"program" pick"fd*/fd"
+    zplugin light sharkdp/fd
+else
+    zplugin ice from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd"
+    zplugin light sharkdp/fd
+fi
 cp ${HOME}/.zplugin/plugins/sharkdp---fd/fd-*/fd.1 \
    ${HOME}/.zplugin/man/man1
 
@@ -259,23 +264,26 @@ zplugin ice wait
 zplugin light changyuheng/fz
 
 zplugin ice wait
-zplugin light mollifier/anyframe
+zplugin light tyama711/anyframe
 
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
 
 bindkey '^xb' anyframe-widget-cdr
 bindkey '^x^b' anyframe-widget-checkout-git-branch
-bindkey '^xr' anyframe-widget-execute-history
-bindkey '^x^r' anyframe-widget-execute-history
-bindkey '^xi' anyframe-widget-put-history
-bindkey '^x^i' anyframe-widget-put-history
+# bindkey '^xr' anyframe-widget-execute-history
+# bindkey '^x^r' anyframe-widget-execute-history
+# bindkey '^xi' anyframe-widget-put-history
+# bindkey '^x^i' anyframe-widget-put-history
 bindkey '^xg' anyframe-widget-cd-ghq-repository
 bindkey '^x^g' anyframe-widget-cd-ghq-repository
 bindkey '^xk' anyframe-widget-kill
 bindkey '^x^k' anyframe-widget-kill
 bindkey '^xe' anyframe-widget-insert-git-branch
 bindkey '^x^e' anyframe-widget-insert-git-branch
+bindkey '^xd' anyframe-widget-delete-git-branch
+bindkey '^xD' anyframe-widget-force-delete-git-branch
+bindkey '^xs' anyframe-widget-ssh
 
 # expressly specify to use fzf
 zstyle ":anyframe:selector:" use fzf
