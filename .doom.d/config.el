@@ -63,6 +63,7 @@
       :desc "Find file in project dwim" "p F" #'counsel-projectile-find-file-dwim
       :desc "Search project dwim" "s P" #'+default/search-project-for-symbol-at-point)
 
-(set-face-foreground 'line-number "#6f6f6f")
+(set-face-foreground 'line-number "#4f4f4f")
 (set-face-foreground 'font-lock-comment-face "#6f6f6f")
 (set-face-background 'region "#2f4f4f")
+(set-face-background 'ivy-current-match "#2f4f4f")
