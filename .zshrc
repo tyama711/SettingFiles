@@ -100,6 +100,10 @@ alias gb='git branch'
 alias ga='git add'
 alias gf='git fetch'
 compdef g=git
+export GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_github'
+
+alias h=head
+alias t=tail
 
 # デフォルトでemacsclientを使用する
 has emacsclient && alias e='emacsclient -nw -a ""'
