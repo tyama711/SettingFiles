@@ -140,10 +140,8 @@ if [[ -t 0 ]]; then
     stty start undef # Disable Ctrl+Q
 fi
 
-# export EDITOR=vi
-# export KEYTIMEOUT=15
-# bindkey -v
-# bindkey -s "fd" $'\x1b'
+export WORDCHARS=$(echo $WORDCHARS | tr -d '/')
+
 
 #####################################################
 ### Zplugin configuration ###########################
