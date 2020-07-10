@@ -66,4 +66,9 @@
 (set-face-foreground 'line-number "#4f4f4f")
 (set-face-foreground 'font-lock-comment-face "#6f6f6f")
 (set-face-background 'region "#2f4f4f")
-(set-face-background 'ivy-current-match "#2f4f4f")
+(after! ivy
+  (set-face-background 'ivy-current-match "#2f4f4f"))
+
+;; centering matching lines by evil-ex-search
+(advice-add #'evil-ex-search :after
+            (lambda (&rest x) (evil-scroll-line-to-center (line-number-at-pos))))
