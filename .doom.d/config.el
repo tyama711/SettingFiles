@@ -72,3 +72,6 @@
 ;; centering matching lines by evil-ex-search
 (advice-add #'evil-ex-search :after
             (lambda (&rest x) (evil-scroll-line-to-center (line-number-at-pos))))
+
+;; associate sql-mode with .btq extension
+(add-to-list 'auto-mode-alist '("\\.btq\\'" . sql-mode))
