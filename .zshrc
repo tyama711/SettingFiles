@@ -104,6 +104,7 @@ alias h=head
 alias t=tail
 
 # デフォルトでemacsclientを使用する
+# TERM環境変数は端末上のemacsで24bitカラーを表示するための設定
 has emacsclient && alias e='TERM=xterm-24bit emacsclient -nw -a ""'
 
 has prename && alias ren=prename
