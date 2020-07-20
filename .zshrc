@@ -23,16 +23,18 @@ else
     echo "no ssh-agent"
 fi
 
+# zshを起動した際にtmuxへアタッチするかどうかを尋ねる
 if [[ -z "${TMUX}" ]]; then
     while :
     do
-        echo -n "attach tmux? (y/n): "
-        read input
-        if [ ${input:0:1} = y ]; then
+        echo -n
+        read -k 1 input"?attach tmux? (y/n): "
+        if [ ${input} = y -o ${input} = Y ]; then
             has tmux && (tmux attach -t base || tmux new -t base) && exit 0
-        elif [ ${input:0:1} = n ]; then
+        elif [ ${input} = n -o ${input} = N ]; then
             break
         fi
+        echo
     done
 fi
 
