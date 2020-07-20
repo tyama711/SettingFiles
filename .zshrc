@@ -23,8 +23,17 @@ else
     echo "no ssh-agent"
 fi
 
-if [[ -n "${REMOTEHOST}${SSH_CONNECTION}" && -z "${TMUX}" ]]; then
-    has tmux && (tmux attach -t base || tmux new -t base) && exit 0
+if [[ -z "${TMUX}" ]]; then
+    while :
+    do
+        echo -n "attach tmux? (y/n): "
+        read input
+        if [ ${input:0:1} = y ]; then
+            has tmux && (tmux attach -t base || tmux new -t base) && exit 0
+        elif [ ${input:0:1} = n ]; then
+            break
+        fi
+    done
 fi
 
 # # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -105,8 +114,25 @@ export GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_github'
 alias h=head
 alias t=tail
 
+# 端末上のemacsで24bitカラーを表示するための設定
+# https://qiita.com/__hage/items/4d8ad65b70e4d6142599
+if [ ! -f ${HOME}/.terminfo/x/xterm-24bit ]; then
+    cat <<EOS > /tmp/terminfo-24bit.src
+# Use colon separators.
+xterm-24bit|xterm with 24-bit direct color mode,
+  use=xterm-256color,
+  setb24=\E[48:2:%p1%{65536}%/%d:%p1%{256}%/%{255}%&%d:%p1%{255}%&%dm,
+  setf24=\E[38:2:%p1%{65536}%/%d:%p1%{256}%/%{255}%&%d:%p1%{255}%&%dm,
+# Use semicolon separators.
+xterm-24bits|xterm with 24-bit direct color mode,
+  use=xterm-256color,
+  setb24=\E[48;2;%p1%{65536}%/%d;%p1%{256}%/%{255}%&%d;%p1%{255}%&%dm,
+  setf24=\E[38;2;%p1%{65536}%/%d;%p1%{256}%/%{255}%&%d;%p1%{255}%&%dm,
+EOS
+    tic -x -o ~/.terminfo /tmp/terminfo-24bit.src
+fi
+
 # デフォルトでemacsclientを使用する
-# TERM環境変数は端末上のemacsで24bitカラーを表示するための設定
 has emacsclient && alias e='TERM=xterm-24bit emacsclient -nw -a ""'
 
 has prename && alias ren=prename
