@@ -46,6 +46,8 @@ if [[ ! -z "$TMUX" ]]; then
     tmux  set-option default-terminal "screen" \; \
           pipe-pane        "cat >> $LOGDIR/$LOGFILE" \; \
           display-message  "Started logging to $LOGDIR/$LOGFILE"
+
+    export TERM=screen-256color
 fi
 
 # ssh の代わりに sshrc コマンドを使用する。
