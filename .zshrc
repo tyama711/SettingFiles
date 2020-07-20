@@ -46,8 +46,6 @@ if [[ ! -z "$TMUX" ]]; then
     tmux  set-option default-terminal "screen" \; \
           pipe-pane        "cat >> $LOGDIR/$LOGFILE" \; \
           display-message  "Started logging to $LOGDIR/$LOGFILE"
-
-    export TERM=screen-256color
 fi
 
 # ssh の代わりに sshrc コマンドを使用する。
@@ -106,7 +104,7 @@ alias h=head
 alias t=tail
 
 # デフォルトでemacsclientを使用する
-has emacsclient && alias e='emacsclient -nw -a ""'
+has emacsclient && alias e='TERM=xterm-24bit emacsclient -nw -a ""'
 
 has prename && alias ren=prename
 
