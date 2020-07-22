@@ -24,13 +24,13 @@ else
 fi
 
 # zshを起動した際にtmuxへアタッチするかどうかを尋ねる
-if ([[ -z "${TMUX}" ]] && has tmux); then
+if {[[ -z "${TMUX}" ]] && has tmux}; then
     while :
     do
         echo -n
         read -k 1 input"?attach tmux? (y/n): "
         if [ ${input} = y -o ${input} = Y ]; then
-            (tmux attach -t base || tmux new -t base) && exit 0
+            {tmux attach -t base || tmux new -t base} && exit 0
         elif [ ${input} = n -o ${input} = N ]; then
             break
         fi
