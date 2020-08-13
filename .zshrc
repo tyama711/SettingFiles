@@ -115,6 +115,7 @@ export GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_github'
 
 alias h=head
 alias t=tail
+alias kube=kubectl
 
 # 端末上のemacsで24bitカラーを表示するための設定
 # https://qiita.com/__hage/items/4d8ad65b70e4d6142599
