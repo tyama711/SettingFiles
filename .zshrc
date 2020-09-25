@@ -174,86 +174,86 @@ export WORDCHARS=$(echo $WORDCHARS | tr -d '/')
 
 
 #####################################################
-### Zplugin configuration ###########################
+### Zinit configuration ###########################
 #####################################################
 
-# zpluginによって設定されたPATHはあらかじめ消しておく。
+# zinitによって設定されたPATHはあらかじめ消しておく。
 # これをしないと、tmuxを使った時にPATHの順序がおかしくなる。
-export PATH=$(echo -n $PATH | tr ':' '\n' | sed -e '/.zplugin/d' | tr '\n' ':')
+export PATH=$(echo -n $PATH | tr ':' '\n' | sed -e '/.zinit/d' | tr '\n' ':')
 
-source "${HOME}/.zplugin/bin/zplugin.zsh"
-autoload -Uz _zplugin
-(( ${+_comps} )) && _comps[zplugin]=_zplugin
-### End of Zplugin installer's chunk
+source "${HOME}/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+### End of Zinit installer's chunk
 
-mkdir -p ${HOME}/.zplugin/man/man1
-export MANPATH=${HOME}/.zplugin/man:$MANPATH
+mkdir -p ${HOME}/.zinit/man/man1
+export MANPATH=${HOME}/.zinit/man:$MANPATH
 
 
 ## program section ##################################
-zplugin ice from"gh-r" as"program" pick"ghq*/ghq"
-zplugin light motemen/ghq
+zinit ice from"gh-r" as"program" pick"ghq*/ghq"
+zinit light motemen/ghq
 
-zplugin ice as"program" \
+zinit ice as"program" \
         atclone"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64" \
         atpull"%atclone" \
         atload"[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh" \
         pick"bin/fzf"
-zplugin light junegunn/fzf
+zinit light junegunn/fzf
 export FZF_DEFAULT_OPTS="--exact --height 20 --bind 'ctrl-k:kill-line' --preview 'echo {}' --preview-window down:3:wrap"
 
-zplugin ice from"gh-r" as"program" atload'eval "$(hub*/bin/hub alias -s)"' \
+zinit ice from"gh-r" as"program" atload'eval "$(hub*/bin/hub alias -s)"' \
         pick"hub*/bin/hub"
-zplugin light github/hub
+zinit light github/hub
 
-zplugin ice from"gh-r" as"program" pick"ripgrep*/rg"
-zplugin light BurntSushi/ripgrep
-cp ${HOME}/.zplugin/plugins/BurntSushi---ripgrep/ripgrep-*/doc/rg.1 \
-   ${HOME}/.zplugin/man/man1
+zinit ice from"gh-r" as"program" pick"ripgrep*/rg"
+zinit light BurntSushi/ripgrep
+cp ${HOME}/.zinit/plugins/BurntSushi---ripgrep/ripgrep-*/doc/rg.1 \
+   ${HOME}/.zinit/man/man1
 
-zplugin ice from"gh-r" as"program" mv"jq* -> jq" pick"jq"
-zplugin light stedolan/jq
+zinit ice from"gh-r" as"program" mv"jq* -> jq" pick"jq"
+zinit light stedolan/jq
 
 if [ $(uname) = Darwin ]; then
-    zplugin ice from"gh-r" bpick"fd-*-darwin*" as"program" pick"fd*/fd"
-    zplugin light sharkdp/fd
+    zinit ice from"gh-r" bpick"fd-*-darwin*" as"program" pick"fd*/fd"
+    zinit light sharkdp/fd
 else
-    zplugin ice as"program" from"gh-r" bpick"*-linux-musl.tar.gz" pick"loc"
-    zplugin light cgag/loc
+    zinit ice as"program" from"gh-r" bpick"*-linux-musl.tar.gz" pick"loc"
+    zinit light cgag/loc
 
-    zplugin ice as"program" from"gh-r" bpick"*_linux_amd64.tar.gz" pick"gh_*/bin/gh"
-    zplugin light cli/cli
+    zinit ice as"program" from"gh-r" bpick"*_linux_amd64.tar.gz" pick"gh_*/bin/gh"
+    zinit light cli/cli
 
-    zplugin ice from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd"
-    zplugin light sharkdp/fd
+    zinit ice from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd"
+    zinit light sharkdp/fd
 fi
-cp ${HOME}/.zplugin/plugins/sharkdp---fd/fd-*/fd.1 \
-   ${HOME}/.zplugin/man/man1
+cp ${HOME}/.zinit/plugins/sharkdp---fd/fd-*/fd.1 \
+   ${HOME}/.zinit/man/man1
 
-zplugin ice from"gh-r" as"program" mv"exa*->exa" pick"exa"
-zplugin light ogham/exa
+zinit ice from"gh-r" as"program" mv"exa*->exa" pick"exa"
+zinit light ogham/exa
 
-zplugin ice from"gh-r" bpick"bat-*-musl*" as"program" pick"bat*/bat"
-zplugin light sharkdp/bat
-cp ${HOME}/.zplugin/plugins/sharkdp---bat/bat-*/bat.1 \
-   ${HOME}/.zplugin/man/man1
+zinit ice from"gh-r" bpick"bat-*-musl*" as"program" pick"bat*/bat"
+zinit light sharkdp/bat
+cp ${HOME}/.zinit/plugins/sharkdp---bat/bat-*/bat.1 \
+   ${HOME}/.zinit/man/man1
 
-zplugin ice as"program" pick"tldr"
-zplugin light raylee/tldr
+zinit ice as"program" pick"tldr"
+zinit light raylee/tldr
 
-zplugin ice as"program" from"gh-r" bpick"*.tar.gz" pick"pet"
-zplugin light knqyf263/pet
+zinit ice as"program" from"gh-r" bpick"*.tar.gz" pick"pet"
+zinit light knqyf263/pet
 
-zplugin ice as"program" pick"bin/anyenv" \
+zinit ice as"program" pick"bin/anyenv" \
         atload"eval \"\$(anyenv init -)\"; [[ -d ${HOME}/.config/anyenv/anyenv-install ]] || anyenv install --force-init"
-zplugin light anyenv/anyenv
+zinit light anyenv/anyenv
 
-zplugin ice as"program" from"gh-r" mv"direnv*->direnv" pick"direnv"
-zplugin light direnv/direnv
+zinit ice as"program" from"gh-r" mv"direnv*->direnv" pick"direnv"
+zinit light direnv/direnv
 eval "$(direnv hook zsh)"
 
-zplugin ice as"program" pick"third_party/build_fatpack/diff-so-fancy"
-zplugin light so-fancy/diff-so-fancy
+zinit ice as"program" pick"third_party/build_fatpack/diff-so-fancy"
+zinit light so-fancy/diff-so-fancy
 git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
 git config --global color.ui true
 git config --global color.diff-highlight.oldNormal    "red bold"
@@ -267,38 +267,38 @@ git config --global color.diff.old        "red bold"
 git config --global color.diff.new        "green bold"
 git config --global color.diff.whitespace "red reverse"
 
-zplugin ice as"program" atclone"./autogen.sh && ./configure && make" \
+zinit ice as"program" atclone"./autogen.sh && ./configure && make" \
         atpull"%atclone" pick"htop"
-zplugin light hishamhm/htop
-cp ${HOME}/.zplugin/plugins/hishamhm---htop/htop.1.in \
-   ${HOME}/.zplugin/man/man1
+zinit light hishamhm/htop
+cp ${HOME}/.zinit/plugins/hishamhm---htop/htop.1.in \
+   ${HOME}/.zinit/man/man1
 
 ## completion section ################################
-zplugin ice wait from"gh-r" as"completion" id-as"hub_completion" \
+zinit ice wait from"gh-r" as"completion" id-as"hub_completion" \
         mv"hub*/etc/hub.zsh_completion -> _hub" pick"_hub"
-zplugin light github/hub
+zinit light github/hub
 
-zplugin ice wait as"completion" id-as"exa_completion" \
+zinit ice wait as"completion" id-as"exa_completion" \
         mv"contrib/completions.zsh->_exa" pick"_exa" \
-        atclone"cp ${HOME}/.zplugin/plugins/exa_completion/contrib/man/exa.1 ${HOME}/.zplugin/man/man1" \
+        atclone"cp ${HOME}/.zinit/plugins/exa_completion/contrib/man/exa.1 ${HOME}/.zinit/man/man1" \
         atpull"%atclone"
-zplugin light ogham/exa
+zinit light ogham/exa
 
 
 ## plugin section ####################################
-zplugin ice wait atload"source up.sh"
-zplugin light shannonmoeller/up
+zinit ice wait atload"source up.sh"
+zinit light shannonmoeller/up
 
-zplugin ice wait \
-        atclone"cp ${HOME}/.zplugin/plugins/rupa---z/z.1 ${HOME}/.zplugin/man/man1" \
+zinit ice wait \
+        atclone"cp ${HOME}/.zinit/plugins/rupa---z/z.1 ${HOME}/.zinit/man/man1" \
         atpull"%atclone"
-zplugin light rupa/z
+zinit light rupa/z
 
-zplugin ice wait
-zplugin light changyuheng/fz
+zinit ice wait
+zinit light changyuheng/fz
 
-zplugin ice wait
-zplugin light tyama711/anyframe
+zinit ice wait
+zinit light tyama711/anyframe
 
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
@@ -324,33 +324,33 @@ zstyle ":anyframe:selector:" use fzf
 # specify path and options for peco, percol, or fzf
 zstyle ":anyframe:selector:fzf:" command 'fzf --extended'
 
-# zplugin ice wait
-zplugin light zsh-users/zsh-completions
+# zinit ice wait
+zinit light zsh-users/zsh-completions
 
-zplugin ice depth=1
-zplugin light romkatv/powerlevel10k
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 
-zplugin ice wait atclone"dircolors -b dircolors.256dark > c.zsh" \
+zinit ice wait atclone"dircolors -b dircolors.256dark > c.zsh" \
         atpull'%atclone' pick"c.zsh" nocompile'!'
-zplugin snippet https://github.com/seebi/dircolors-solarized/blob/master/dircolors.256dark
+zinit snippet https://github.com/seebi/dircolors-solarized/blob/master/dircolors.256dark
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
-zplugin ice wait atload'_zsh_autosuggest_start'
-zplugin light zsh-users/zsh-autosuggestions
+zinit ice wait atload'_zsh_autosuggest_start'
+zinit light zsh-users/zsh-autosuggestions
 
-zplugin ice wait"1" atinit"zpcompinit"
-zplugin light zsh-users/zsh-syntax-highlighting
+zinit ice wait"1" atinit"zpcompinit"
+zinit light zsh-users/zsh-syntax-highlighting
 
-zplugin ice wait"2" \
+zinit ice wait"2" \
         atload'bindkey "^[p" history-substring-search-up' \
         atload'bindkey "^[n" history-substring-search-down'
-zplugin light zsh-users/zsh-history-substring-search
+zinit light zsh-users/zsh-history-substring-search
 
 ######################################################
-### End of Zplugin configuration #####################
+### End of Zinit configuration #####################
 ######################################################
 
 [[ -f ${HOME}/.zshrc.local ]] && source ${HOME}/.zshrc.local
