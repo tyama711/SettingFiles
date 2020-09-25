@@ -192,51 +192,53 @@ export MANPATH=${HOME}/.zinit/man:$MANPATH
 
 ## program section ##################################
 zinit ice from"gh-r" as"program" pick"ghq*/ghq"
-zinit light motemen/ghq
+zinit light x-motemen/ghq
 
 zinit ice as"program" \
-        atclone"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64" \
-        atpull"%atclone" \
-        atload"[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh" \
-        pick"bin/fzf"
+    atclone"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64" \
+    atpull"%atclone" \
+    atload"[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh" \
+    pick"bin/fzf"
 zinit light junegunn/fzf
 export FZF_DEFAULT_OPTS="--exact --height 20 --bind 'ctrl-k:kill-line' --preview 'echo {}' --preview-window down:3:wrap"
 
 zinit ice from"gh-r" as"program" atload'eval "$(hub*/bin/hub alias -s)"' \
-        pick"hub*/bin/hub"
+    pick"hub*/bin/hub"
 zinit light github/hub
 
-zinit ice from"gh-r" as"program" pick"ripgrep*/rg"
+zinit ice from"gh-r" as"program" pick"ripgrep*/rg" \
+    atclone"ln -sf ${HOME}/.zinit/plugins/BurntSushi---ripgrep/ripgrep-*/doc/rg.1 ${HOME}/.zinit/man/man1" \
+    atpull"%atclone"
 zinit light BurntSushi/ripgrep
-cp ${HOME}/.zinit/plugins/BurntSushi---ripgrep/ripgrep-*/doc/rg.1 \
-   ${HOME}/.zinit/man/man1
 
 zinit ice from"gh-r" as"program" mv"jq* -> jq" pick"jq"
 zinit light stedolan/jq
 
 if [ $(uname) = Darwin ]; then
-    zinit ice from"gh-r" bpick"fd-*-darwin*" as"program" pick"fd*/fd"
+    zinit ice as"program" from"gh-r" bpick"*-apple-darwin.tar.gz" pick"loc"
+    zinit light cgag/loc
+
+    zinit ice from"gh-r" bpick"fd-*-darwin*" as"program" pick"fd*/fd" \
+        atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---fd/fd-*/fd.1 ${HOME}/.zinit/man/man1" \
+        atpull"%atclone"
     zinit light sharkdp/fd
 else
     zinit ice as"program" from"gh-r" bpick"*-linux-musl.tar.gz" pick"loc"
     zinit light cgag/loc
 
-    zinit ice as"program" from"gh-r" bpick"*_linux_amd64.tar.gz" pick"gh_*/bin/gh"
-    zinit light cli/cli
-
-    zinit ice from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd"
+    zinit ice from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd" \
+        atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---fd/fd-*/fd.1 ${HOME}/.zinit/man/man1" \
+        atpull"%atclone"
     zinit light sharkdp/fd
 fi
-cp ${HOME}/.zinit/plugins/sharkdp---fd/fd-*/fd.1 \
-   ${HOME}/.zinit/man/man1
 
 zinit ice from"gh-r" as"program" mv"exa*->exa" pick"exa"
 zinit light ogham/exa
 
-zinit ice from"gh-r" bpick"bat-*-musl*" as"program" pick"bat*/bat"
+zinit ice from"gh-r" bpick"bat-*-musl*" as"program" pick"bat*/bat" \
+    atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---bat/bat-*/bat.1 ${HOME}/.zinit/man/man1" \
+    atpull"%atclone"
 zinit light sharkdp/bat
-cp ${HOME}/.zinit/plugins/sharkdp---bat/bat-*/bat.1 \
-   ${HOME}/.zinit/man/man1
 
 zinit ice as"program" pick"tldr"
 zinit light raylee/tldr
@@ -245,7 +247,7 @@ zinit ice as"program" from"gh-r" bpick"*.tar.gz" pick"pet"
 zinit light knqyf263/pet
 
 zinit ice as"program" pick"bin/anyenv" \
-        atload"eval \"\$(anyenv init -)\"; [[ -d ${HOME}/.config/anyenv/anyenv-install ]] || anyenv install --force-init"
+    atload"eval \"\$(anyenv init -)\"; [[ -d ${HOME}/.config/anyenv/anyenv-install ]] || anyenv install --force-init"
 zinit light anyenv/anyenv
 
 zinit ice as"program" from"gh-r" mv"direnv*->direnv" pick"direnv"
@@ -267,21 +269,24 @@ git config --global color.diff.old        "red bold"
 git config --global color.diff.new        "green bold"
 git config --global color.diff.whitespace "red reverse"
 
-zinit ice as"program" atclone"./autogen.sh && ./configure && make" \
-        atpull"%atclone" pick"htop"
+zinit ice as"program" \
+    atclone"./autogen.sh && ./configure && make && \\
+        ln -sf ${HOME}/.zinit/plugins/hishamhm---htop/htop.1.in ${HOME}/.zinit/man/man1" \
+    atpull"%atclone" pick"htop"
 zinit light hishamhm/htop
-cp ${HOME}/.zinit/plugins/hishamhm---htop/htop.1.in \
-   ${HOME}/.zinit/man/man1
+
+zinit ice as"program" from"gh-r" bpick"*_amd64.tar.gz" pick"gh_*/bin/gh"
+zinit light cli/cli
 
 ## completion section ################################
 zinit ice wait from"gh-r" as"completion" id-as"hub_completion" \
-        mv"hub*/etc/hub.zsh_completion -> _hub" pick"_hub"
+    mv"hub*/etc/hub.zsh_completion -> _hub" pick"_hub"
 zinit light github/hub
 
 zinit ice wait as"completion" id-as"exa_completion" \
-        mv"contrib/completions.zsh->_exa" pick"_exa" \
-        atclone"cp ${HOME}/.zinit/plugins/exa_completion/contrib/man/exa.1 ${HOME}/.zinit/man/man1" \
-        atpull"%atclone"
+    mv"contrib/completions.zsh->_exa" pick"_exa" \
+    atclone"ln -sf ${HOME}/.zinit/plugins/exa_completion/contrib/man/exa.1 ${HOME}/.zinit/man/man1" \
+    atpull"%atclone"
 zinit light ogham/exa
 
 
@@ -290,8 +295,8 @@ zinit ice wait atload"source up.sh"
 zinit light shannonmoeller/up
 
 zinit ice wait \
-        atclone"cp ${HOME}/.zinit/plugins/rupa---z/z.1 ${HOME}/.zinit/man/man1" \
-        atpull"%atclone"
+    atclone"ln -sf ${HOME}/.zinit/plugins/rupa---z/z.1 ${HOME}/.zinit/man/man1" \
+    atpull"%atclone"
 zinit light rupa/z
 
 zinit ice wait
@@ -316,7 +321,7 @@ bindkey '^x^k' anyframe-widget-kill
 bindkey '^xe' anyframe-widget-insert-git-branch
 bindkey '^x^e' anyframe-widget-insert-git-branch
 bindkey '^xd' anyframe-widget-delete-git-branch
-bindkey '^xD' anyframe-widget-force-delete-git-branch
+bindkey '^x^d' anyframe-widget-force-delete-git-branch
 bindkey '^xs' anyframe-widget-ssh
 
 # expressly specify to use fzf
@@ -334,7 +339,7 @@ zinit light romkatv/powerlevel10k
 
 
 zinit ice wait atclone"dircolors -b dircolors.256dark > c.zsh" \
-        atpull'%atclone' pick"c.zsh" nocompile'!'
+    atpull'%atclone' pick"c.zsh" nocompile'!'
 zinit snippet https://github.com/seebi/dircolors-solarized/blob/master/dircolors.256dark
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
@@ -345,8 +350,8 @@ zinit ice wait"1" atinit"zpcompinit"
 zinit light zsh-users/zsh-syntax-highlighting
 
 zinit ice wait"2" \
-        atload'bindkey "^[p" history-substring-search-up' \
-        atload'bindkey "^[n" history-substring-search-down'
+    atload'bindkey "^[p" history-substring-search-up' \
+    atload'bindkey "^[n" history-substring-search-down'
 zinit light zsh-users/zsh-history-substring-search
 
 ######################################################
