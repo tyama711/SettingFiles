@@ -218,6 +218,12 @@ if [ $(uname) = Darwin ]; then
     zplugin ice from"gh-r" bpick"fd-*-darwin*" as"program" pick"fd*/fd"
     zplugin light sharkdp/fd
 else
+    zplugin ice as"program" from"gh-r" bpick"*-linux-musl.tar.gz" pick"loc"
+    zplugin light cgag/loc
+
+    zplugin ice as"program" from"gh-r" bpick"*_linux_amd64.tar.gz" pick"gh_*/bin/gh"
+    zplugin light cli/cli
+
     zplugin ice from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd"
     zplugin light sharkdp/fd
 fi
@@ -266,10 +272,6 @@ zplugin ice as"program" atclone"./autogen.sh && ./configure && make" \
 zplugin light hishamhm/htop
 cp ${HOME}/.zplugin/plugins/hishamhm---htop/htop.1.in \
    ${HOME}/.zplugin/man/man1
-
-zplugin ice as"program" from"gh-r" bpick"*-linux-musl.tar.gz" pick"loc"
-zplugin light cgag/loc
-
 
 ## completion section ################################
 zplugin ice wait from"gh-r" as"completion" id-as"hub_completion" \
