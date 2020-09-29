@@ -190,11 +190,36 @@ if [ -d "${HOME}/.zinit" ]; then
     mkdir -p ${HOME}/.zinit/man/man1
     export MANPATH=${HOME}/.zinit/man:$MANPATH
 
-    mkdir -p ${HOME}/.zfunc
-    export FPATH=${HOME}/.zfunc:$FPATH
-
 
     ## program section ##################################
+    if [ $(uname) = Darwin ]; then
+        zinit ice as"program" from"gh-r" bpick"*-apple-darwin.tar.gz" pick"loc"
+        zinit light cgag/loc
+
+        zinit ice from"gh-r" bpick"fd-*-darwin*" as"program" pick"fd*/fd" \
+            atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---fd/fd-*/fd.1 ${HOME}/.zinit/man/man1" \
+            atpull"%atclone"
+        zinit light sharkdp/fd
+
+	zinit ice from"gh-r" bpick"bat-*-darwin*" as"program" pick"bat*/bat" \
+	    atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---bat/bat-*/bat.1 ${HOME}/.zinit/man/man1" \
+	    atpull"%atclone"
+	zinit light sharkdp/bat
+    else
+        zinit ice as"program" from"gh-r" bpick"*-linux-musl.tar.gz" pick"loc"
+        zinit light cgag/loc
+
+        zinit ice from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd" \
+            atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---fd/fd-*/fd.1 ${HOME}/.zinit/man/man1" \
+            atpull"%atclone"
+        zinit light sharkdp/fd
+
+	zinit ice from"gh-r" bpick"bat-*-musl*" as"program" pick"bat*/bat" \
+	    atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---bat/bat-*/bat.1 ${HOME}/.zinit/man/man1" \
+	    atpull"%atclone"
+	zinit light sharkdp/bat
+    fi
+
     zinit ice from"gh-r" as"program" pick"ghq*/ghq"
     zinit light x-motemen/ghq
 
@@ -218,37 +243,11 @@ if [ -d "${HOME}/.zinit" ]; then
     zinit ice from"gh-r" as"program" mv"jq* -> jq" pick"jq"
     zinit light stedolan/jq
 
-    if [ $(uname) = Darwin ]; then
-        zinit ice as"program" from"gh-r" bpick"*-apple-darwin.tar.gz" pick"loc"
-        zinit light cgag/loc
-
-        zinit ice from"gh-r" bpick"fd-*-darwin*" as"program" pick"fd*/fd" \
-            atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---fd/fd-*/fd.1 ${HOME}/.zinit/man/man1" \
-            atpull"%atclone"
-        zinit light sharkdp/fd
-    else
-        zinit ice as"program" from"gh-r" bpick"*-linux-musl.tar.gz" pick"loc"
-        zinit light cgag/loc
-
-        zinit ice from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd" \
-            atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---fd/fd-*/fd.1 ${HOME}/.zinit/man/man1" \
-            atpull"%atclone"
-        zinit light sharkdp/fd
-    fi
-
     zinit ice from"gh-r" as"program" mv"exa*->exa" pick"exa"
     zinit light ogham/exa
 
-    zinit ice from"gh-r" bpick"bat-*-musl*" as"program" pick"bat*/bat" \
-        atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---bat/bat-*/bat.1 ${HOME}/.zinit/man/man1" \
-        atpull"%atclone"
-    zinit light sharkdp/bat
-
     zinit ice as"program" pick"tldr"
     zinit light raylee/tldr
-
-    zinit ice as"program" from"gh-r" bpick"*.tar.gz" pick"pet"
-    zinit light knqyf263/pet
 
     zinit ice as"program" pick"bin/anyenv" \
         atload'eval "$(anyenv init -)"; [[ -d ${HOME}/.config/anyenv/anyenv-install ]] || anyenv install --force-init'
@@ -280,7 +279,7 @@ if [ -d "${HOME}/.zinit" ]; then
     zinit light hishamhm/htop
 
     zinit ice as"program" from"gh-r" bpick"*_amd64.tar.gz" pick"gh_*/bin/gh" \
-        atload"gh completion -s zsh > ${HOME}/.zfunc/_gh"
+        atload"gh completion -s zsh > ${HOME}/.zinit/completions/_gh"
     zinit light cli/cli
 
     ## completion section ################################
