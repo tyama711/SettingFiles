@@ -30,7 +30,7 @@ if {[[ -z "${TMUX}" ]] && has tmux}; then
         echo -n
         read -k 1 input"?attach tmux? (y/n): "
         if [ ${input} = y -o ${input} = Y ]; then
-            {tmux attach -t base || tmux new -t base} && exit 0
+            {tmux attach -dt base || tmux new -t base} && exit 0
         elif [ ${input} = n -o ${input} = N ]; then
             break
         fi
