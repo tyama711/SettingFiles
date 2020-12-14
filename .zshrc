@@ -346,8 +346,7 @@ if [ -d "${HOME}/.zinit" ]; then
         atpull'%atclone' pick"c.zsh" nocompile'!'
     zinit snippet https://github.com/seebi/dircolors-solarized/blob/master/dircolors.256dark
 
-    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=10"
-    zinit ice wait atload'_zsh_autosuggest_start'
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
     zinit light zsh-users/zsh-autosuggestions
 
     zinit ice wait"1" atinit"zpcompinit"
