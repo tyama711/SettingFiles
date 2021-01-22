@@ -224,7 +224,7 @@ if [ -d "${HOME}/.zinit" ]; then
     zinit light x-motemen/ghq
 
     zinit ice as"program" \
-        atclone"./install --key-bindings --completion --no-update-rc --no-bash --no-fish --64" \
+        atclone"./install --key-bindings --completion --no-fish" \
         atpull"%atclone" \
         atload"[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh" \
         pick"bin/fzf"
