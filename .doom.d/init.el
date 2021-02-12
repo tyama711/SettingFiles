@@ -67,6 +67,7 @@
        electric          ; smarter, keyword-based electric-indent
        ;;ibuffer         ; interactive buffer management
        vc                ; version-control and Emacs, sitting in a tree
+       undo
 
        :term
        ;;eshell            ; a consistent, cross-platform shell (WIP)
@@ -172,4 +173,7 @@
 
        :config
        ;;literate
-       (default +bindings +smartparens))
+       (default +bindings +smartparens)
+
+       :os
+       (tty +osc))
