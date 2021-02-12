@@ -87,3 +87,6 @@
   '(aw-leading-char-face
     :foreground "white" :background "red"
     :weight bold :height 2.5 :box (:line-width 10 :color "red")))
+
+;; TAB(C-i)で'better-jumper-jump-forwardを実行する
+(define-key! evil-motion-state-map "C-i" #'better-jumper-jump-forward)
