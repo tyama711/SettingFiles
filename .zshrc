@@ -346,15 +346,17 @@ if [ -d "${HOME}/.zinit" ]; then
     zinit snippet https://github.com/seebi/dircolors-solarized/blob/master/dircolors.256dark
 
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
+    zinit ice wait lucid
     zinit light zsh-users/zsh-autosuggestions
 
-    zinit ice wait lucid atload"zicompinit; zicdreplay"
-    zinit light zsh-users/zsh-syntax-highlighting
+# 以下の2つを有効にすると、ZSH_AUTOSUGGEST_HIGHLIGHT_STYLEがなぜか効かなくなる
+#     zinit ice wait lucid atload"zicompinit; zicdreplay"
+#     zinit light zsh-users/zsh-syntax-highlighting
 
-    zinit ice wait lucid \
-        atload'bindkey "^[p" history-substring-search-up' \
-        atload'bindkey "^[n" history-substring-search-down'
-    zinit light zsh-users/zsh-history-substring-search
+#     zinit ice wait lucid \
+#         atload'bindkey "^[p" history-substring-search-up' \
+#         atload'bindkey "^[n" history-substring-search-down'
+#     zinit light zsh-users/zsh-history-substring-search
 
 fi
 ######################################################
