@@ -1,4 +1,4 @@
-# # zmodload zsh/zprof && zprof
+# zmodload zsh/zprof && zprof
 
 if [[ -f /usr/local/bin/zsh && $(readlink /proc/$$/exe) != /usr/local/bin/zsh && $0 != /usr/local/bin/zsh ]]; then
     /usr/local/bin/zsh
@@ -193,37 +193,37 @@ if [ -d "${HOME}/.zinit" ]; then
 
     ## program section ##################################
     if [ $(uname) = Darwin ]; then
-        zinit ice as"program" from"gh-r" bpick"*-apple-darwin.tar.gz" pick"loc"
+        zinit ice wait lucid as"program" from"gh-r" bpick"*-apple-darwin.tar.gz" pick"loc"
         zinit light cgag/loc
 
-        zinit ice from"gh-r" bpick"fd-*-darwin*" as"program" pick"fd*/fd" \
+        zinit ice wait lucid from"gh-r" bpick"fd-*-darwin*" as"program" pick"fd*/fd" \
             atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---fd/fd-*/fd.1 ${HOME}/.zinit/man/man1" \
             atpull"%atclone"
         zinit light sharkdp/fd
 
-	zinit ice from"gh-r" bpick"bat-*-darwin*" as"program" pick"bat*/bat" \
+	zinit ice wait lucid from"gh-r" bpick"bat-*-darwin*" as"program" pick"bat*/bat" \
 	    atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---bat/bat-*/bat.1 ${HOME}/.zinit/man/man1" \
 	    atpull"%atclone"
 	zinit light sharkdp/bat
     else
-        zinit ice as"program" from"gh-r" bpick"*-linux-musl.tar.gz" pick"loc"
+        zinit ice wait lucid as"program" from"gh-r" bpick"*-linux-musl.tar.gz" pick"loc"
         zinit light cgag/loc
 
-        zinit ice from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd" \
+        zinit ice wait lucid from"gh-r" bpick"fd-*-musl*" as"program" pick"fd*/fd" \
             atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---fd/fd-*/fd.1 ${HOME}/.zinit/man/man1" \
             atpull"%atclone"
         zinit light sharkdp/fd
 
-	zinit ice from"gh-r" bpick"bat-*-musl*" as"program" pick"bat*/bat" \
+	zinit ice wait lucid from"gh-r" bpick"bat-*-musl*" as"program" pick"bat*/bat" \
 	    atclone"ln -sf ${HOME}/.zinit/plugins/sharkdp---bat/bat-*/bat.1 ${HOME}/.zinit/man/man1" \
 	    atpull"%atclone"
 	zinit light sharkdp/bat
     fi
 
-    zinit ice from"gh-r" as"program" pick"ghq*/ghq"
+    zinit ice wait lucid from"gh-r" as"program" pick"ghq*/ghq"
     zinit light x-motemen/ghq
 
-    zinit ice as"program" \
+    zinit ice wait lucid as"program" \
         atclone"./install --key-bindings --completion --no-fish" \
         atpull"%atclone" \
         atload"[ -f $HOME/.fzf.zsh ] && source ~/.fzf.zsh" \
@@ -231,33 +231,32 @@ if [ -d "${HOME}/.zinit" ]; then
     zinit light junegunn/fzf
     export FZF_DEFAULT_OPTS="--exact --height 20 --bind 'ctrl-k:kill-line' --preview 'echo {}' --preview-window down:3:wrap"
 
-    zinit ice from"gh-r" as"program" atload'eval "$(hub*/bin/hub alias -s)"' \
+    zinit ice wait lucid from"gh-r" as"program" atload'eval "$(hub*/bin/hub alias -s)"' \
         pick"hub*/bin/hub"
     zinit light github/hub
 
-    zinit ice from"gh-r" as"program" pick"ripgrep*/rg" \
+    zinit ice wait lucid from"gh-r" as"program" pick"ripgrep*/rg" \
         atclone"ln -sf ${HOME}/.zinit/plugins/BurntSushi---ripgrep/ripgrep-*/doc/rg.1 ${HOME}/.zinit/man/man1" \
         atpull"%atclone"
     zinit light BurntSushi/ripgrep
 
-    zinit ice from"gh-r" as"program" mv"jq* -> jq" pick"jq"
+    zinit ice wait lucid from"gh-r" as"program" mv"jq* -> jq" pick"jq"
     zinit light stedolan/jq
 
-    zinit ice from"gh-r" as"program" mv"exa*->exa" pick"exa"
+    zinit ice wait lucid from"gh-r" as"program" mv"exa*->exa" pick"exa"
     zinit light ogham/exa
 
-    zinit ice as"program" pick"tldr"
+    zinit ice wait lucid as"program" pick"tldr"
     zinit light raylee/tldr
 
     zinit ice as"program" pick"bin/anyenv" \
         atload'eval "$(anyenv init -)"; [[ -d ${HOME}/.config/anyenv/anyenv-install ]] || anyenv install --force-init'
     zinit light anyenv/anyenv
 
-    zinit ice as"program" from"gh-r" mv"direnv*->direnv" pick"direnv"
+    zinit ice wait lucid as"program" from"gh-r" mv"direnv*->direnv" pick"direnv" atload'eval "$(direnv hook zsh)"'
     zinit light direnv/direnv
-    eval "$(direnv hook zsh)"
 
-    zinit ice as"program" pick"third_party/build_fatpack/diff-so-fancy"
+    zinit ice wait lucid as"program" pick"third_party/build_fatpack/diff-so-fancy"
     zinit light so-fancy/diff-so-fancy
     git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
     git config --global color.ui true
@@ -272,22 +271,22 @@ if [ -d "${HOME}/.zinit" ]; then
     git config --global color.diff.new        "green bold"
     git config --global color.diff.whitespace "red reverse"
 
-    zinit ice as"program" \
+    zinit ice wait lucid as"program" \
         atclone"./autogen.sh && ./configure && make && \\
             ln -sf ${HOME}/.zinit/plugins/hishamhm---htop/htop.1.in ${HOME}/.zinit/man/man1" \
         atpull"%atclone" pick"htop"
     zinit light hishamhm/htop
 
-    zinit ice as"program" from"gh-r" bpick"*_amd64.tar.gz" pick"gh_*/bin/gh" \
+    zinit ice wait lucid as"program" from"gh-r" bpick"*_amd64.tar.gz" pick"gh_*/bin/gh" \
         atload"gh completion -s zsh > ${HOME}/.zinit/completions/_gh"
     zinit light cli/cli
 
     ## completion section ################################
-    zinit ice wait from"gh-r" as"completion" id-as"hub_completion" \
+    zinit ice wait lucid from"gh-r" as"completion" id-as"hub_completion" \
         mv"hub*/etc/hub.zsh_completion -> _hub" pick"_hub"
     zinit light github/hub
 
-    zinit ice wait as"completion" id-as"exa_completion" \
+    zinit ice wait lucid as"completion" id-as"exa_completion" \
         mv"contrib/completions.zsh->_exa" pick"_exa" \
         atclone"ln -sf ${HOME}/.zinit/plugins/exa_completion/contrib/man/exa.1 ${HOME}/.zinit/man/man1" \
         atpull"%atclone"
@@ -295,18 +294,18 @@ if [ -d "${HOME}/.zinit" ]; then
 
 
     ## plugin section ####################################
-    zinit ice wait atload"source up.sh"
+    zinit ice wait lucid atload"source up.sh"
     zinit light shannonmoeller/up
 
-    zinit ice wait \
+    zinit ice wait lucid \
         atclone"ln -sf ${HOME}/.zinit/plugins/rupa---z/z.1 ${HOME}/.zinit/man/man1" \
         atpull"%atclone"
     zinit light rupa/z
 
-    zinit ice wait
+    zinit ice wait lucid
     zinit light changyuheng/fz
 
-    zinit ice wait
+    zinit ice wait lucid
     zinit light tyama711/anyframe
 
     autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
@@ -342,17 +341,17 @@ if [ -d "${HOME}/.zinit" ]; then
     [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 
-    zinit ice wait atclone"dircolors -b dircolors.256dark > c.zsh" \
+    zinit ice wait lucid atclone"dircolors -b dircolors.256dark > c.zsh" \
         atpull'%atclone' pick"c.zsh" nocompile'!'
     zinit snippet https://github.com/seebi/dircolors-solarized/blob/master/dircolors.256dark
 
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
     zinit light zsh-users/zsh-autosuggestions
 
-    zinit ice wait"1" atinit"zpcompinit"
+    zinit ice wait lucid atload"zicompinit; zicdreplay"
     zinit light zsh-users/zsh-syntax-highlighting
 
-    zinit ice wait"2" \
+    zinit ice wait lucid \
         atload'bindkey "^[p" history-substring-search-up' \
         atload'bindkey "^[n" history-substring-search-down'
     zinit light zsh-users/zsh-history-substring-search
