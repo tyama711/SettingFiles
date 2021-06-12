@@ -90,3 +90,12 @@
 
 ;; TAB(C-i)で'better-jumper-jump-forwardを実行する
 (define-key! evil-motion-state-map "C-i" #'evil-jump-forward)
+
+;; discover git projects automatically
+(setq projectile-project-search-path
+      (nconc
+       (cddr (directory-files "~/ghq/partner.git.corp.yahoo.co.jp/" t))
+       (cddr (directory-files "~/ghq/ghe.corp.yahoo.co.jp/" t))
+       (cddr (directory-files "~/ghq/git.corp.yahoo.co.jp/" t))
+       (cddr (directory-files "~/ghq/github.com/" t))))
+(setq projectile-auto-discover t)

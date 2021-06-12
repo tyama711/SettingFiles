@@ -350,8 +350,8 @@ if [ -d "${HOME}/.zinit" ]; then
     zinit light zsh-users/zsh-autosuggestions
 
 # 以下の2つを有効にすると、ZSH_AUTOSUGGEST_HIGHLIGHT_STYLEがなぜか効かなくなる
-#     zinit ice wait lucid atload"zicompinit; zicdreplay"
-#     zinit light zsh-users/zsh-syntax-highlighting
+    zinit ice wait lucid atload"zicompinit; zicdreplay"
+    zinit light zsh-users/zsh-syntax-highlighting
 
 #     zinit ice wait lucid \
 #         atload'bindkey "^[p" history-substring-search-up' \
